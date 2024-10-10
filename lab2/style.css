@@ -1,0 +1,32 @@
+body
+{
+	background-color: powderblue;
+}
+
+#container
+{
+	width: 1400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+
+a:link
+{
+	color: black;
+}
+
+a:visited
+{
+	color: black;
+}
+
+a:hover
+{
+	color: green;
+}
+
+span
+{
+	background-color: #d5f4e6;
+}
