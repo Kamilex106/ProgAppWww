@@ -1,6 +1,6 @@
 var computed = false;
 var decimal = 0;
-function convert (entryform, form, to)
+function convert (entryform, from, to)
 {
 	convertfrom = from.selectedIndex;
 	convertto = to.selectedIndex;

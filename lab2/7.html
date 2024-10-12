@@ -6,18 +6,92 @@
 	<meta name="Author" content="Kamil Leleniewski" />
 	<meta name="description" content="Przegląd wybranych zagadnień związanych z komputerami" />
 	<title>Komputer moją pasją</title>
-
+	<script src="timedate.js" type="text/javascript"></script>
 	<script src="kolorujtlo.js" type="text/javascript"></script>
+	<script src="zmianaslajdu.js" type="text/javascript"></script>
+	
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+
+	<style>
+	#container
+{
+	width: 1400px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#logo
+{
+	width: 1200px;
+	background-color: gray;
+	color: white;
+	padding: 10px;
+	float: left;
+	text-indent: 530px;
+	
+}
+
+#info
+{
+	width: 180px;
+	height: 100px;
+	background-color: gray;
+	color: white;
+	text-align: center;
+	float: right;
+}
+
+#nav
+{
+	text-align: center;
+	font-weight: bold;
+	background-color: green;
+}
+
+#content
+{
+	text-align: justify;
+	padding: 10px;
+}
+
+#footer
+{
+
+	background-color: gray;
+	color: white;
+	text-align: center;
+}
+
+a:link
+{
+	color: black;
+}
+
+a:visited
+{
+	color: black;
+}
+
+a:hover
+{
+	color: green;
+}
+	</style>
 
 </head>
 
 
-<body onload="startclock()">
-	<script src="timedate.js" type="text/javascript"></script>
+<body onload="startclock();changeBackground('powderblue');zmienslajd()">
 	<div id="container">
 	
 	<div id="logo">
 		<h1>Komputer moją pasją </h1>
+	</div>
+	
+	<div id="info">
+		<div style="text-align: center;" id="data"></div>
+		<div style="text-align: center;" id="zegarek"></div>
+		v.1.1
 	</div>
 	
 	<div id="nav">
@@ -51,8 +125,10 @@
 	
 	<div id="content">
 	<h2> JavaScript </h2>
+	JavaScript, w skrócie JS – skryptowy oraz wieloparadygmatowy język programowania, stworzony przez firmę Netscape, najczęściej stosowany na stronach internetowych. Twórcą JavaScriptu jest Brendan Eich. W połowie lat 90. XX wieku organizacja ECMA wydała na podstawie JavaScriptu standard języka skryptowego o nazwie ECMAScript, aktualnie rozwijaniem tego standardu zajmuje się komisja TC39.
+	<br /><br />
 	
-	
+	<h3>Wybór kolorów: </h3>
 	<FORM METHOD="POST" NAME="background">
 		<INPUT TYPE="button" VALUE="żółty" ONCLICK="changeBackground('#FFF000')">
 		<INPUT TYPE="button" VALUE="czarny" ONCLICK="changeBackground('#000000')">
@@ -64,9 +140,54 @@
 		<INPUT TYPE="button" VALUE="czerwony" ONCLICK="changeBackground('#FF0000')">
 	</FORM>
 
+	<div id="slider"></div>
+	<span onclick="ustawslajd(1)" style="cursor:pointer;">[ 1 ]</span>
+	<span onclick="ustawslajd(2)" style="cursor:pointer;">[ 2 ]</span>
+	<span onclick="ustawslajd(3)" style="cursor:pointer;">[ 3 ]</span>
 
-	<div id="zegarek"></div>
-	<div id="data"></div>
+
+	<h3>Konwerter: </h3>
+	<form name="converter">
+        <p>
+            <label for="input">Wprowadź wartość:</label>
+            <input type="text" name="input" id="input" value="0" oninput="convert(this.form, this.form.measure1, this.form.measure2)">
+        </p>
+
+        <p>
+            <label for="measure1">Z:</label>
+            <select name="measure1" id="measure1" onchange="convert(this.form, this, this.form.measure2)">
+                <option value="1">metry</option>
+                <option value="100">centymetry</option>
+                <option value="0.001">kilometry</option>
+            </select>
+
+            <label for="measure2">Na:</label>
+            <select name="measure2" id="measure2" onchange="convert(this.form, this.form.measure1, this)">
+                <option value="1">metry</option>
+                <option value="100">centymetry</option>
+                <option value="0.001">kilometry</option>
+            </select>
+        </p>
+
+        <p>
+            <label for="display">Wynik:</label>
+            <input type="text" name="display" id="display" readonly>
+        </p>
+
+        <p>
+            <button type="button" onclick="clearForm(this.form)">Wyczyść</button>
+        </p>
+    </form>
+
+    <h3>Dodaj cyfrę</h3>
+    <button onclick="addChar(document.converter.input, '1')">1</button>
+    <button onclick="addChar(document.converter.input, '2')">2</button>
+    <button onclick="addChar(document.converter.input, '3')">3</button>
+    <button onclick="addChar(document.converter.input, '.')">.</button>
+
+    <h3>Nowe okno</h3>
+    <button onclick="openVothcom()">Otwórz nowe okno</button>
+
 
 	</div>
 	

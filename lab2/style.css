@@ -10,6 +10,48 @@ body
 	margin-right: auto;
 }
 
+#logo
+{
+	width: 1200px;
+	background-color: gray;
+	color: white;
+	padding: 10px;
+	float: left;
+	text-indent: 530px;
+	
+}
+
+#info
+{
+	width: 180px;
+	height: 100px;
+	background-color: gray;
+	color: white;
+	text-align: center;
+	float: right;
+}
+
+#nav
+{
+	clear: both;
+	text-align: center;
+	font-weight: bold;
+	background-color: green;
+}
+
+#content
+{
+	text-align: justify;
+	padding: 10px;
+}
+
+#footer
+{
+
+	background-color: gray;
+	color: white;
+	text-align: center;
+}
 
 a:link
 {
@@ -30,3 +72,4 @@ span
 {
 	background-color: #d5f4e6;
 }
+

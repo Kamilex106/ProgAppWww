@@ -7,16 +7,24 @@
 	<meta name="description" content="Przegląd wybranych zagadnień związanych z komputerami" />
 	<title>Komputer moją pasją</title>
 	<link rel="stylesheet" href="style.css"  />
+	<script src="timedate.js" type="text/javascript"></script>
+	
 
 </head>
 
 
-<body>
+<body onload="startclock()">
 
 	<div id="container">
 	
 	<div id="logo">
 		<h1>Komputer moją pasją </h1>
+	</div>
+	
+	<div id="info">
+		<div style="text-align: center;" id="data"></div>
+		<div style="text-align: center;" id="zegarek"></div>
+		v.1.1
 	</div>
 	
 	<div id="nav">
@@ -50,7 +58,7 @@
 	
 	<div id="content">
 	<h2> Czym są właściwie komputery? </h2>
-	<img style="float:left; margin:6px" src="img/1.jpg" width="200" height="200" />
+	<img style="float:left; margin:6px" src="img/1.jpg" width="200" height="160" />
 	<span>
 	 Komputer (od ang. computer); dawniej: mózg elektronowy, elektroniczna maszyna cyfrowa, maszyna matematyczna – maszyna przeznaczona do przetwarzania informacji, które da się zapisać w formie ciągu cyfr albo sygnału ciągłego. Maszyna roku tygodnika „Time” w 1982 roku.
 	</span>
@@ -60,8 +68,8 @@
 	Małe komputery mogą zmieścić się nawet w zegarku i są zasilane baterią. Komputery osobiste stały się symbolem ery informatycznej. Najliczniejszymi maszynami liczącymi są systemy wbudowane sterujące najróżniejszymi urządzeniami – od odtwarzaczy MP3 i zabawek po roboty przemysłowe.
 	<br /><br />
 	<h2> Komputery i inne maszyny liczące </h2>
-	<img style="float:left; margin:6px" src="img/3.jpg" width="200" height="230" />
-	<img style="float:right; margin:6px "  src="img/2.jpg" width="200" height="330" />
+	<img style="float:left; margin:6px" src="img/3.jpg" width="200" height="280" />
+	<img style="float:right; margin:6px "  src="img/2.jpg" width="200" height="280" />
 	<u>Komputer od typowego kalkulatora odróżnia zdolność wykonywania wielokrotnie, automatycznie powtarzanych obliczeń, według algorytmicznego wzorca zwanego programem</u>, gdy tymczasem kalkulator może zwykle wykonywać tylko pojedyncze działania. Granica jest tu umowna, ponieważ taką definicję komputera spełniają też kalkulatory programowalne (naukowe, inżynierskie), jednak kalkulatory służą tylko do obliczeń numerycznych, podczas gdy nazwa komputer najczęściej dotyczy urządzeń wielofunkcyjnych.
 	<br /><br />
 	Jakkolwiek istnieją mechaniczne urządzenia liczące, które potrafią realizować całkiem złożone programy, zazwyczaj nie zalicza się ich do komputerów. Warto jednak pamiętać, że prawzorem komputera jest abstrakcyjny model zwany maszyną Turinga, a pierwsze urządzenia ułatwiające obliczenia były znane w starożytności, na przykład abakus z 440 p.n.e.
