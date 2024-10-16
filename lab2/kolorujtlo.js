@@ -23,7 +23,7 @@ function addChar (input, character)
 
 function openVothcom()
 {
-	window.open("","Display window","toolbar=no,directories=no,menubar=no");
+	window.open("index.html","Display window","toolbar=no,directories=no,menubar=no");
 }
 
 function clear (form)

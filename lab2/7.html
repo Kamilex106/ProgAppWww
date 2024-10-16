@@ -14,53 +14,51 @@
 
 	<style>
 	#container
-{
-	width: 1400px;
-	margin-left: auto;
-	margin-right: auto;
-}
+	{
+		width: 1400px;
+		margin-left: auto;
+		margin-right: auto;
+	}
 
-#logo
-{
-	width: 1200px;
-	background-color: gray;
-	color: white;
-	padding: 10px;
-	float: left;
-	text-indent: 530px;
-	
-}
+	#logo
+	{
+		width: 1200px;
+		background-color: gray;
+		color: white;
+		padding: 10px;
+		float: left;
+		text-indent: 530px;
+	}
 
-#info
-{
-	width: 180px;
-	height: 100px;
+	#info
+	{
+		width: 180px;
+		height: 100px;
+		background-color: gray;
+		color: white;
+		text-align: center;
+		float: right;
+	}
+
+	#nav
+	{
+		text-align: center;
+		font-weight: bold;
+		background-color: green;
+	}
+
+	#content
+	{
+		text-align: justify;
+		padding: 10px;
+	}
+
+	#footer
+	{
 	background-color: gray;
 	color: white;
 	text-align: center;
-	float: right;
-}
-
-#nav
-{
-	text-align: center;
-	font-weight: bold;
-	background-color: green;
-}
-
-#content
-{
-	text-align: justify;
-	padding: 10px;
-}
-
-#footer
-{
-
-	background-color: gray;
-	color: white;
-	text-align: center;
-}
+	}
 
 a:link
 {
@@ -157,15 +155,15 @@ a:hover
             <label for="measure1">Z:</label>
             <select name="measure1" id="measure1" onchange="convert(this.form, this, this.form.measure2)">
                 <option value="1">metry</option>
-                <option value="100">centymetry</option>
-                <option value="0.001">kilometry</option>
+                <option value="0.01">centymetry</option>
+                <option value="1000">kilometry</option>
             </select>
 
             <label for="measure2">Na:</label>
             <select name="measure2" id="measure2" onchange="convert(this.form, this.form.measure1, this)">
                 <option value="1">metry</option>
-                <option value="100">centymetry</option>
-                <option value="0.001">kilometry</option>
+                <option value="0.01">centymetry</option>
+                <option value="1000">kilometry</option>
             </select>
         </p>
 
@@ -175,7 +173,7 @@ a:hover
         </p>
 
         <p>
-            <button type="button" onclick="clearForm(this.form)">Wyczyść</button>
+            <button type="button" onclick="this.form.reset()">Wyczyść</button>
         </p>
     </form>
 
@@ -183,6 +181,13 @@ a:hover
     <button onclick="addChar(document.converter.input, '1')">1</button>
     <button onclick="addChar(document.converter.input, '2')">2</button>
     <button onclick="addChar(document.converter.input, '3')">3</button>
+	<button onclick="addChar(document.converter.input, '4')">4</button>
+	<button onclick="addChar(document.converter.input, '5')">5</button>
+	<button onclick="addChar(document.converter.input, '6')">6</button>
+	<button onclick="addChar(document.converter.input, '7')">7</button>
+	<button onclick="addChar(document.converter.input, '8')">8</button>
+	<button onclick="addChar(document.converter.input, '9')">9</button>
+	
     <button onclick="addChar(document.converter.input, '.')">.</button>
 
     <h3>Nowe okno</h3>
