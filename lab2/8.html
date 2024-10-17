@@ -6,15 +6,16 @@
 	<meta name="Author" content="Kamil Leleniewski" />
 	<meta name="description" content="Przegląd wybranych zagadnień związanych z komputerami" />
 	<title>Komputer moją pasją</title>
-	<link rel="stylesheet" href="style.css"  />
 	<script src="timedate.js" type="text/javascript"></script>
-	
+	<script src="kolorujtlo.js" type="text/javascript"></script>
+	<script src="zmianaslajdu.js" type="text/javascript"></script>
+	<link rel="stylesheet" href="style.css"  />
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
 
 </head>
 
 
-<body onload="startclock()">
-
+<body onload="startclock();changeBackground('powderblue');zmienslajd()">
 	<div id="container">
 	
 	<div id="logo">
@@ -59,31 +60,59 @@
 	</div>
 	
 	
-	
 	<div id="content">
-	<h2>Formularz kontaktowy</h2>
-	<div id="form"></div>
-		<form action="mailto:komputery.mojapasja@gmail.com" method="post">
-		<br />
-		<input type="text" name="name" id="name" class="formField" placeholder="Wpisz imię" /> 
-		<br />
-		<input type="text" name="surname" id="surname" class="formField" placeholder="Wpisz nazwisko" /> 
-		<br />
-		<input type="text" name="email" id="email" class="formField" placeholder="Wpisz adres email" /> 
-		<br />
-		Wiadomość
-		<br />
-		<textarea style= "width: 1200px; height: 200px " name="message" id="message"  placeholder="Treść wiadomości"> </textarea>
-		<br />
-		<input type="submit" value="Wyslij">
-		</form>
+	<h2 JQuery</h2>
+
+ <div id="animacjaTestowa1" class="test-block">Kliknij, a się powiększę</div>
+    
+    <div id="animacjaTestowa2" class="test-block">Najedź kursorem, a się powiększę</div>
+
+    <div id="animacjaTestowa3" class="test-block">Klikaj, abym urósł</div>
+
+    <script>
+        $("#animacjaTestowa1").on("click", function(){
+            $(this).animate({
+                width: "500px",
+                opacity: 0.4,
+                fontSize: "3em",
+                borderWidth: "10px"
+            }, 1500);
+        });
+
+
+        $("#animacjaTestowa2").on({
+			"mouseover" : function(){
+            $(this).animate({
+                width: 300
+            }, 800);
+        },
+		"mouseout" : function(){
+            $(this).animate({
+                width: 200
+            }, 800);
+        }
+});
+
+        $("#animacjaTestowa3").on("click", function() {
+            if (!$(this).is(":animated")) {
+                $(this).animate({
+                    width: "+=" + 50,
+                    height: "+=" + 10,
+                    opacity: "-=" + 0.1,
+                    duration: 3000
+                });
+            }
+		});
+
+    </script>
 	</div>
 	
 	
 	<div id="footer">
-	<i> Komputer moją pasją &copy; Kamil Leleniewski </i>
+		<i> Komputer moją pasją &copy; Kamil Leleniewski </i>
 	</div>
-	
+
 	</div>
+
 </body>
 </html>
