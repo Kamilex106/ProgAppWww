@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+	<meta name="Author" content="Kamil Leleniewski">
+	<meta name="description" content="Przegląd wybranych zagadnień związanych z komputerami">
+	<title>Komputer moją pasją</title>
+	<link rel="stylesheet" href="style.css">
+	<script src="timedate.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script>
+		function myFunction() {
+  		var x = document.getElementById("myTopnav");
+  		if (x.className === "topnav") {x.className += " responsive";} 
+		else {x.className = "topnav";}}
+	</script>
+
+</head>
+
+
+<body onload="startclock()">
+
+	<div class="container">
+		<header>
+			<div class="row1">
+				<div id="logo">
+					<h1>Komputer moją pasją </h1>
+				</div>
+				
+				<div id="info">
+					<div style="text-align: center;" id="data"></div>
+					<div style="text-align: center;" id="zegarek"></div>
+					v.1.2
+				</div>
+			</div>
+			
+			
+			<div class="topnav" id="myTopnav">
+				<a href="index.html" class="active">Główna</a>
+				<a href="2.html">Historia komputerów</a>
+				<a href="3.html">Systemy operacyjne</a>
+				<a href="4.html">Języki programowania</a>
+				<a href="5.html">Historia Internetu</a>
+				<a href="6.html">Kontakt</a>
+				<a href="7.html">JavaScript</a>
+				<a href="8.html">JQuery</a>
+				<a href="javascript:void(0);" class="icon" onclick="myFunction()">
+				  <i class="fa fa-bars"></i>
+				</a>
+			  </div>
+			
+		</header>
+		
+		
+		<main>
+			<article>
+				<header class="artheader">
+					<h2> Kilka słów o komputerach </h2>
+				</header>
+				<section>
+					<header>
+						<div id="animacjaTestowa1" class="test-block"><h3> Co to jest komputer? </h3></div>
+					</header>
+					<img style="float:left; margin:6px" src="img/1.jpg" width="200" height="160" alt="komputer1">
+						<span>
+						 Komputer (od ang. computer); dawniej: mózg elektronowy, elektroniczna maszyna cyfrowa, maszyna matematyczna – maszyna przeznaczona do przetwarzania informacji, które da się zapisać w formie ciągu cyfr albo sygnału ciągłego. Maszyna roku tygodnika „Time” w 1982 roku.
+						</span>
+						<br><br>
+						Mimo że mechaniczne maszyny liczące istniały od wielu stuleci, komputery w sensie współczesnym pojawiły się dopiero w połowie XX wieku, gdy zbudowano pierwsze komputery elektroniczne. Miały one rozmiary sporych pomieszczeń i zużywały kilkaset razy więcej energii niż współczesne komputery osobiste (PC), a jednocześnie miały miliardy razy mniejszą moc obliczeniową. Współcześnie są prowadzone także badania nad komputerami biologicznymi i optycznymi.
+						<br><br>
+						Małe komputery mogą zmieścić się nawet w zegarku i są zasilane baterią. Komputery osobiste stały się symbolem ery informatycznej. Najliczniejszymi maszynami liczącymi są systemy wbudowane sterujące najróżniejszymi urządzeniami – od odtwarzaczy MP3 i zabawek po roboty przemysłowe.
+						<br><br>	
+				</section>
+				
+				<section>
+					<header>
+						<h3> Komputery i inne maszyny liczące </h3>
+					</header>
+					<div class="last">
+						<img style="float:left; margin:6px" src="img/3.jpg" width="200" height="280" alt="komputer2">
+						<img style="float:right; margin:6px "  src="img/2.jpg" width="200" height="280" alt="komputer3">						
+						<u>Komputer od typowego kalkulatora odróżnia zdolność wykonywania wielokrotnie, automatycznie powtarzanych obliczeń, według algorytmicznego wzorca zwanego programem</u>, gdy tymczasem kalkulator może zwykle wykonywać tylko pojedyncze działania. Granica jest tu umowna, ponieważ taką definicję komputera spełniają też kalkulatory programowalne (naukowe, inżynierskie), jednak kalkulatory służą tylko do obliczeń numerycznych, podczas gdy nazwa komputer najczęściej dotyczy urządzeń wielofunkcyjnych.
+						<br><br>
+						Jakkolwiek istnieją mechaniczne urządzenia liczące, które potrafią realizować całkiem złożone programy, zazwyczaj nie zalicza się ich do komputerów. Warto jednak pamiętać, że prawzorem komputera jest abstrakcyjny model zwany maszyną Turinga, a pierwsze urządzenia ułatwiające obliczenia były znane w starożytności, na przykład abakus z 440 p.n.e.
+						<br><br>
+						W początkowym okresie rozwoju komputerów budowano komputery zerowej generacji na przekaźnikach i elementach mechanicznych.
+						<br><br>
+						Właściwie wszystkie współczesne komputery to maszyny elektroniczne. Próby budowania komputerów optycznych (wykorzystujących przełączniki optyczne), optoelektronicznych (połączenie elementów optycznych i elektronicznych), biologicznych (wykorzystujące wypreparowane komórki nerwowe) czy molekularnych (wykorzystujące jako bramki logiczne pojedyncze cząsteczki) są jeszcze w powijakach i do ich praktycznego zastosowania jest wciąż długa droga. Innym rodzajem komputera jest komputer kwantowy, którego układ przetwarzający dane wykorzystuje efekty fizyczne wynikające z mechaniki kwantowej.
+					</div>
+				</section>
+	
+			</article>
+	
+	
+		</main>
+		
+		
+		<footer>
+			<div class="info">
+				<i> Komputer moją pasją &copy; Kamil Leleniewski </i>
+			</div>
+		</footer>
+	</div>
+
+
+	<script src="powiekszenie.js"></script>
+
+</body>
+</html>

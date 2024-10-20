@@ -1,0 +1,152 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+	<meta http-equiv="Content-type" content="text/html; charset=UTF-8">
+	<meta name="Author" content="Kamil Leleniewski">
+	<meta name="description" content="Przegląd wybranych zagadnień związanych z komputerami">
+	<title>Komputer moją pasją</title>
+	<link rel="stylesheet" href="style2.css">
+	<script src="timedate.js"></script>
+	<script src="kolorujtlo.js"></script>
+	<script src="zmianaslajdu.js"></script>
+	<script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script>
+		function myFunction() {
+  		var x = document.getElementById("myTopnav");
+  		if (x.className === "topnav") {x.className += " responsive";} 
+		else {x.className = "topnav";}}
+	</script>
+
+</head>
+
+
+<body onload="startclock();changeBackground('gray');zmienslajd()">
+
+	<div class="container">
+		<header>
+			<div class="row1">
+				<div id="logo">
+					<h1>Komputer moją pasją </h1>
+				</div>
+				
+				<div id="info">
+					<div style="text-align: center;" id="data"></div>
+					<div style="text-align: center;" id="zegarek"></div>
+					v.1.2
+				</div>
+			</div>
+			
+			
+			<div class="topnav" id="myTopnav">
+				<a href="index.html">Główna</a>
+				<a href="2.html">Historia komputerów</a>
+				<a href="3.html">Systemy operacyjne</a>
+				<a href="4.html">Języki programowania</a>
+				<a href="5.html">Historia Internetu</a>
+				<a href="6.html">Kontakt</a>
+				<a href="7.html" class="active">JavaScript</a>
+				<a href="8.html">JQuery</a>
+				<a href="javascript:void(0);" class="icon" onclick="myFunction()">
+				  <i class="fa fa-bars"></i>
+				</a>
+			  </div>
+			
+		</header>
+		
+		
+		<main>
+			<article>
+				<header class="artheader">
+					<h2> JavaScript </h2>
+				</header>
+				JavaScript, w skrócie JS – skryptowy oraz wieloparadygmatowy język programowania, stworzony przez firmę Netscape, najczęściej stosowany na stronach internetowych. Twórcą JavaScriptu jest Brendan Eich. W połowie lat 90. XX wieku organizacja ECMA wydała na podstawie JavaScriptu standard języka skryptowego o nazwie ECMAScript, aktualnie rozwijaniem tego standardu zajmuje się komisja TC39.
+				<br><br>
+				
+				<h3>Wybór kolorów: </h3>
+				<FORM METHOD="POST" NAME="background">
+					<INPUT TYPE="button" VALUE="żółty" ONCLICK="changeBackground('#FFF000')">
+					<INPUT TYPE="button" VALUE="czarny" ONCLICK="changeBackground('#000000')">
+					<INPUT TYPE="button" VALUE="biały" ONCLICK="changeBackground('#FFFFFF')">
+					<INPUT TYPE="button" VALUE="zielony" ONCLICK="changeBackground('#00FF00')">
+					<INPUT TYPE="button" VALUE="niebieski" ONCLICK="changeBackground('#0000FF')">
+					<INPUT TYPE="button" VALUE="pomarańczowy" ONCLICK="changeBackground('#FF8000')">
+					<INPUT TYPE="button" VALUE="szary" ONCLICK="changeBackground('#c0c0c0')">
+					<INPUT TYPE="button" VALUE="czerwony" ONCLICK="changeBackground('#FF0000')">
+				</FORM>
+			
+				<div id="slider"></div>
+				<span onclick="ustawslajd(1)" style="cursor:pointer;">[ 1 ]</span>
+				<span onclick="ustawslajd(2)" style="cursor:pointer;">[ 2 ]</span>
+				<span onclick="ustawslajd(3)" style="cursor:pointer;">[ 3 ]</span>
+			
+			
+				<h3>Konwerter: </h3>
+				<form name="converter">
+					<p>
+						<label for="input">Wprowadź wartość:</label>
+						<input type="text" name="input" id="input" value="0" oninput="convert(this.form, this.form.measure1, this.form.measure2)">
+					</p>
+			
+					<p>
+						<label for="measure1">Z:</label>
+						<select name="measure1" id="measure1" onchange="convert(this.form, this, this.form.measure2)">
+							<option value="1">metry</option>
+							<option value="0.01">centymetry</option>
+							<option value="1000">kilometry</option>
+						</select>
+			
+						<label for="measure2">Na:</label>
+						<select name="measure2" id="measure2" onchange="convert(this.form, this.form.measure1, this)">
+							<option value="1">metry</option>
+							<option value="0.01">centymetry</option>
+							<option value="1000">kilometry</option>
+						</select>
+					</p>
+			
+					<p>
+						<label for="display">Wynik:</label>
+						<input type="text" name="display" id="display" readonly>
+					</p>
+			
+					<p>
+						<button type="button" onclick="this.form.reset()">Wyczyść</button>
+					</p>
+				</form>
+			
+				<h3>Dodaj cyfrę</h3>
+				<button onclick="addChar(document.converter.input, '1')">1</button>
+				<button onclick="addChar(document.converter.input, '2')">2</button>
+				<button onclick="addChar(document.converter.input, '3')">3</button>
+				<button onclick="addChar(document.converter.input, '4')">4</button>
+				<button onclick="addChar(document.converter.input, '5')">5</button>
+				<button onclick="addChar(document.converter.input, '6')">6</button>
+				<button onclick="addChar(document.converter.input, '7')">7</button>
+				<button onclick="addChar(document.converter.input, '8')">8</button>
+				<button onclick="addChar(document.converter.input, '9')">9</button>
+				
+				<button onclick="addChar(document.converter.input, '.')">.</button>
+			
+				<h3>Nowe okno</h3>
+				<button onclick="openVothcom()">Otwórz nowe okno</button>
+			</article>
+		</main>
+		
+		
+		<footer>
+			<div class="info">
+				<i> Komputer moją pasją &copy; Kamil Leleniewski </i>
+			</div>
+		</footer>
+	</div>
+
+
+
+</body>
+</html>
+
+	
+
+
+
