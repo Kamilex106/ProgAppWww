@@ -8,6 +8,8 @@ $("#animacjaTestowa1").on("click", function(){
 });
 
 
+
+
 $("#animacjaTestowa2").on({
     "mouseover" : function(){
     $(this).animate({
@@ -30,4 +32,13 @@ $("#animacjaTestowa3").on("click", function() {
             duration: 3000
         });
     }
+});
+
+$("#animacjaTestowa4").on("click", function(){
+    $(this).animate({
+        width: "1000px",
+        opacity: 0.6,
+        fontSize: "2em",
+        borderWidth: "15px"
+    }, 1500);
 });
