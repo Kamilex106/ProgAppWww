@@ -23,7 +23,7 @@ function zmienslajd()
 	{
 		numer++; if (numer>3) numer=1;
 				
-		var plik = "<img src=\"img/j" + numer + ".png\" />";
+		var plik = "<img src=\"../img/j" + numer + ".png\" />";
 				
 		document.getElementById("slider").innerHTML = plik;
 		$("#slider").fadeIn(500);
