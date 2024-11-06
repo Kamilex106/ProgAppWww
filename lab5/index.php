@@ -77,26 +77,11 @@
 		</header>
 
 		<?php
-
-		$files = [
-			"html/glowna.html",
-			"html/2.html",
-			"html/3.html",
-			"html/4.html",
-			"html/5.html",
-			"html/6.html",
-			"html/7.html",
-			"html/8.html"
-			];
-
-	
-		foreach($files as $file) {
-			if (file_exists($file) == false)
-			{
-				echo "The file $file exists";
-			}
-		}
-		include($strona);
+			if (file_exists($strona) == false)
+				{
+					echo "The file not $file exists";
+				}
+			else include($strona);
 		?>
 
 
