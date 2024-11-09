@@ -2,13 +2,13 @@
  error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
  if($_GET['idp'] == '') $strona = '1';
- if($_GET['idp'] == '2') $strona = '2';
- if($_GET['idp'] == '3') $strona = '3';
- if($_GET['idp'] == '4') $strona = '4';
- if($_GET['idp'] == '5') $strona = '5';
- if($_GET['idp'] == '6') $strona = '6';
- if($_GET['idp'] == '7') $strona = '7';
- if($_GET['idp'] == '8') $strona = '8';
+ if($_GET['idp'] == 'historia_komputerow') $strona = '2';
+ if($_GET['idp'] == 'systemy') $strona = '3';
+ if($_GET['idp'] == 'jezyki') $strona = '4';
+ if($_GET['idp'] == 'historia_internetu') $strona = '5';
+ if($_GET['idp'] == 'kontakt') $strona = '6';
+ if($_GET['idp'] == 'js') $strona = '7';
+ if($_GET['idp'] == 'jq') $strona = '8';
  if($_GET['idp'] == 'filmy') $strona = '9';
 
 include('cfg.php');
@@ -62,13 +62,13 @@ include('showpage.php');
 			
 			<div class="topnav" id="myTopnav">
 				<a href="index.php?idp=" class="active">Główna</a>
-				<a href="index.php?idp=2">Historia komputerów</a>
-				<a href="index.php?idp=3">Systemy operacyjne</a>
-				<a href="index.php?idp=4">Języki programowania</a>
-				<a href="index.php?idp=5">Historia Internetu</a>
-				<a href="index.php?idp=6">Kontakt</a>
-				<a href="index.php?idp=7">JavaScript</a>
-				<a href="index.php?idp=8">JQuery</a>
+				<a href="index.php?idp=historia_komputerow">Historia komputerów</a>
+				<a href="index.php?idp=systemy">Systemy operacyjne</a>
+				<a href="index.php?idp=jezyki">Języki programowania</a>
+				<a href="index.php?idp=historia_internetu">Historia Internetu</a>
+				<a href="index.php?idp=kontakt">Kontakt</a>
+				<a href="index.php?idp=js">JavaScript</a>
+				<a href="index.php?idp=jq">JQuery</a>
 				<a href="index.php?idp=filmy">Filmy</a>
 				<a href="javascript:void(0);" class="icon" onclick="myFunction()">
 				  <i class="fa fa-bars"></i>
@@ -78,8 +78,8 @@ include('showpage.php');
 		</header>
 
 		<?php
-
-			PokazPodstrone($strona);
+			
+			echo(PokazPodstrone($strona));
 		?>
 
 

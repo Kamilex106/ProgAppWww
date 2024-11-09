@@ -2,10 +2,16 @@
 include('cfg.php');
 function PokazPodstrone($id)
 {
-    $id_clear = htmlspecialchars($id);
-
-    $query="SELECT * FROM page_list WHERE id='$id_clear' LIMIT 1";
-     $result=mysqli_query($link, $query);
+    global $link;
+    if($id == null)
+    {
+      return "Nie znaleziono strony";
+    }
+    else
+    {
+      $id_clear = htmlspecialchars($id);
+      $query="SELECT * FROM page_list WHERE id='$id_clear' LIMIT 1";
+      $result=mysqli_query( $link,$query);
       $row=mysqli_fetch_array($result);
 
       if(empty($row['id']))
@@ -16,7 +22,8 @@ function PokazPodstrone($id)
       {
         $web=$row['page_content'];
       }
-return $web;
+      return $web;
+    }
+    
 }
 ?>
-
