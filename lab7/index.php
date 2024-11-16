@@ -1,4 +1,8 @@
 <?php
+session_start();
+if (!isset($_SESSION["is_logged"])) {
+    $_SESSION["is_logged"] = 0; 
+}
  error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
 
  if($_GET['idp'] == '') $strona = '1';
@@ -15,7 +19,8 @@
 
 include('cfg.php'); 
 include('showpage.php');
-include('/admin/admin.php');
+include('./admin/admin.php');
+
 
 ?>
 
@@ -84,9 +89,33 @@ include('/admin/admin.php');
 
 		<?php
 			
-			echo(PokazPodstrone($strona));
 			if($_GET['idp'] == 'admin')
-				FormularzLogowania()
+			{
+				echo(FormularzLogowania());
+				PrzetwarzanieFormularza();
+				if ($_SESSION["is_logged"] == 1)
+				{
+					include('./html/admin.html');
+					if($_GET['action'] == 'list')
+					{
+						ListaPodstron();
+					}
+					if($_GET['action'] == 'add')
+					{
+						echo(DodajNowaPodstrone());
+					}
+
+				}
+				
+				PrzetwarzajEdycje();
+				PrzetwarzajDodanie();
+
+			}
+			else{
+			echo(PokazPodstrone($strona));
+			}
+
+			 
 
 		?>
 
