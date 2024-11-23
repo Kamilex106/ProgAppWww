@@ -15,12 +15,14 @@ if (!isset($_SESSION["is_logged"])) {
  if($_GET['idp'] == 'jq') $strona = '8';
  if($_GET['idp'] == 'filmy') $strona = '9';
  if($_GET['idp'] == 'admin') $strona = '10';
+ if($_GET['idp'] == 'kontakt_php') $strona = '11';
+
  
 
 include('cfg.php'); 
 include('showpage.php');
 include('./admin/admin.php');
-include('contact.php');
+include('contact2.php');
 
 
 
@@ -83,6 +85,7 @@ include('contact.php');
 				<a href="index.php?idp=jq">JQuery</a>
 				<a href="index.php?idp=filmy">Filmy</a>
 				<a href="index.php?idp=admin">Panel administratora</a>
+				<a href="index.php?idp=kontakt_php">Kontakt PHP</a>
 				<a href="javascript:void(0);" class="icon" onclick="myFunction()">
 				  <i class="fa fa-bars"></i>
 				</a>
@@ -98,7 +101,7 @@ include('contact.php');
 				PrzetwarzanieFormularza();
 				if ($_SESSION["is_logged"] == 1)
 				{
-					include('./html/admin.html');
+					echo(PokazPodstrone($strona));
 					if($_GET['action'] == 'list')
 					{
 						ListaPodstron();
@@ -118,9 +121,28 @@ include('contact.php');
 			echo(PokazPodstrone($strona));
 			}
 
-			if($_GET['idp'] == 'kontakt')
+			if($_GET['idp'] == 'kontakt_php')
 			{
+				echo('<h2 class="heading">Przypomnij haslo:</h2>');
+				echo('<form method="post" name="PasswordForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
+				<input type="text" name="email" id="email" class="formField" placeholder="Wpisz adres email"> 
+				<br>
+				<input type="submit" name="password_submit" class="remind_password" value="Przypomnij haslo">
+		   		</form>');
+				if (isset($_POST['password_submit'])) {
+					$email = $_POST['email'];
+					PrzypomnijHaslo($email);
+				}
+				if (isset($_POST['contact_submit']))
+				{
+					$email = $_POST['email'];
+					WyslijMailaKontakt($email);
+				}
+				else
+				{
 				echo(PokazKontakt());
+
+				}
 			}
 		
 
