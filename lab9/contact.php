@@ -1,9 +1,17 @@
 <?php
 include("cfg.php");
 
+/*
+ Obsługuje wyświetlanie i przetwarzanie formularza kontaktowego.
+ Funkcjonalności:
+ - Wyświetlanie formularza
+ - Wysyłanie wiadomości email przez funkcję `mail()`
+ - Przypomnienie hasła
+ - Obsługa błędów (walidacja danych wejściowych)
+ */
 
-//Ta funkcja zwraca zmienną wynik, która wyświetlona za pomocą echo pokazuje formularz kontaktowy
 
+ // Zwraca HTML dla formularza kontaktowego
 function PokazKontakt()
 {
     $wynik = '
@@ -26,26 +34,25 @@ function PokazKontakt()
     return $wynik;
 }
 
-/*
-Ta funkcja wysyła maila 
-*/
+// Przetwarza formularz i wysyła wiadomość email.
 function WyslijMailaKontakt($odbiorca)
 {
+    // Sprawdzenie, czy wszystkie pola zostały wypełnione
     if (empty($_POST['temat']) || empty($_POST['tresc']) || empty($_POST['email'])) {
         echo '[nie_wypelniles_pola]';
-        echo PokazKontakt();
+        echo PokazKontakt(); // Ponownie wyświetla formularz z komunikatem
     } else {
-        $mail['subject'] = htmlspecialchars($_POST['temat']);
-        $mail['body'] = htmlspecialchars($_POST['tresc']);
-        $mail['sender'] = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL);
+        $mail['subject'] = htmlspecialchars($_POST['temat']);  // Usunięcie znaków specjalnych
+        $mail['body'] = htmlspecialchars($_POST['tresc']); // Usunięcie znaków specjalnych
+        $mail['sender'] = filter_var($_POST['email'], FILTER_VALIDATE_EMAIL); // Walidacja emaila
 
         if (!$mail['sender']) {
-            echo '[niepoprawny_adres_email]';
+            echo '[niepoprawny_adres_email]'; // Komunikat o błędnym adresie
             return;
         }
 
         $mail['reciptient'] = $odbiorca;
-
+        // Przygotowanie nagłówków emaila
         $header = "From: Formularz kontaktowy <".$mail['sender'].">\n";
         $header .= "MIME-Version: 1.0\n";
         $header .= "Content-Type: text/plain; charset=utf-8\n";
@@ -54,6 +61,7 @@ function WyslijMailaKontakt($odbiorca)
         $header .= "X-Mailer: PHP/".phpversion()."\n";
         $header .= "Return-Path: <".$mail['sender'].">\n";
 
+        // Wysłanie wiadomości
         if (mail($mail['reciptient'], $mail['subject'], $mail['body'], $header)) {
             echo '[wiadomosc_wyslana]';
         } else {
@@ -62,24 +70,24 @@ function WyslijMailaKontakt($odbiorca)
     }
 }
 
-
-/*funkcja sprawdza czy istnieje zmienna z hasłem do panelu admina,
-a następnie wysyła go na adres email podany w formularzu
-*/
+// Przypomina hasło użytkownikowi poprzez email.
 function PrzypomnijHaslo($odbiorca)
 {
-    global $pass;
+    global $pass; // Pobranie globalnej zmiennej przechowującej hasło
 
+    // Sprawdzenie, czy hasło jest ustawione
     if (empty($pass)) {
-        echo '[brak_hasla]';
-        return;
+        echo '[brak_hasla]'; // Wyświetlenie komunikatu o braku hasła
+        return;  // Zakończenie działania funkcji
     }
 
+    // Przygotowanie danych do wysyłki emaila
     $mail['subject'] = "Przypomnij haslo";
     $mail['body'] = "Twoje hasło: ".$pass;
     $mail['sender'] = 'przypomnij@example.com';
     $mail['reciptient'] = $odbiorca;
 
+    // Przygotowanie nagłówków emaila
     $header = "From: Formularz kontaktowy <".$mail['sender'].">\n";
     $header .= "MIME-Version: 1.0\n";
     $header .= "Content-Type: text/plain; charset=utf-8\n";
@@ -88,6 +96,7 @@ function PrzypomnijHaslo($odbiorca)
     $header .= "X-Mailer: PHP/".phpversion()."\n";
     $header .= "Return-Path: <".$mail['sender'].">\n";
 
+    // Wysłanie wiadomości email
     if (mail($mail['reciptient'], $mail['subject'], $mail['body'], $header)) {
         echo '[wiadomosc_wyslana]';
     } else {

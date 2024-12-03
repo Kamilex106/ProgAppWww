@@ -1,10 +1,19 @@
 <?php
-session_start();
+session_start(); // Rozpoczęcie sesji
 include("cfg.php");
-//funckcja wyświetla formlularz logowania jeśli zmienna SESSION["is_logged"] jest równa 0
+
+/*
+Panel administracyjny aplikacji CMS.
+Funkcjonalności:
+ - Logowanie administratora
+ - Zarządzanie podstronami (dodawanie, edytowanie, usuwanie)
+ - Obsługa formularzy (walidacja i przetwarzanie)
+*/
+
+// Zwraca HTML dla formularza logowania
 function FormularzLogowania()
 {
-  if ($_SESSION["is_logged"]==0)
+  if ($_SESSION["is_logged"]==0) // Jeśli użytkownik jest niezalogowany
   {
     $wynik = '
     <div class="logowanie">
@@ -27,40 +36,40 @@ function FormularzLogowania()
 
 }
 
-/*funkcja sprawdza czy formularz logowania został wysłany i poprawnie wypełniony -
-jeśli tak to wyświetla odpowiedni komunikat i ustawia zmienną SESSION["is_logged] na 1, 
-a w przeciwnym wypadku wyświetla komunikat o błędzie i wyświetla niżej nowy formularz logowania 
-*/
+// Przetwarza dane z formularza logowania.
 function PrzetwarzanieFormularza()
 {
     global $login;
     global $pass;
 
+    // Sprawdzanie, czy formularz został przesłany
     if (isset($_POST['x1_submit'])) {
+        // Pobranie i oczyszczenie danych z formularza
         $log = isset($_POST['login_email']) ? trim($_POST['login_email']) : '';
         $password = isset($_POST['login_pass']) ? trim($_POST['login_pass']) : '';
 
+        // Sprawdzanie poprawności danych logowania
         if ($log==$login && $password==$pass) {
             echo 'Zalogowano poprawnie';
-            $_SESSION["is_logged"]=1;
+            $_SESSION["is_logged"]=1; // Oznaczenie użytkownika jako zalogowanego
         } else {
           echo '<p style="color:red;">Wszystkie pola muszą być wypełnione.</p>';
-          echo(FormularzLogowania());
+          echo(FormularzLogowania()); // Ponowne wyświetlenie formularza
         }
     }
 }
 
-
-
-//funkcja wyświetla listę wszystkich podstron, które zawiera witryna
+// Wyświetla listę podstron z opcjami edycji i usuwania.
 function ListaPodstron()
 {
-  global $link;
-  $query="SELECT * FROM page_list ORDER BY id LIMIT 100";
+  global $link; // Połączenie z bazą danych
+  $query="SELECT * FROM page_list ORDER BY id LIMIT 100"; // Pobranie listy podstron
   $result = mysqli_query($link,$query);
 
+  // Iteracja przez wyniki zapytania
   while($row = mysqli_fetch_array( $result)) 
   {
+    // Wyświetlanie podstrony z opcjami edycji i usuwania
     echo($row['id'].' '.$row['page_title'].'  <form method="post">
         <input type="submit" name="delete' .$row['id'].'"
                 value="Usun"/>
@@ -70,26 +79,26 @@ function ListaPodstron()
     </form>');
   }
 
-
+  // Obsługa akcji edycji i usuwania
   if (isset($_POST['edit_submit']) == false) {
     foreach ($_POST as $key => $value) {
       if (strpos($key, needle: 'delete') === 0) {
-          UsunPodstrone($key);
+          UsunPodstrone($key); // Usuwanie podstrony
       }
       if (strpos($key, needle: 'edit') === 0) {
-        echo(EdytujPodstrone($key));
+        echo(EdytujPodstrone($key));  // Wyświetlenie formularza edycji
     }
   }
   }
 
 }
 
-//funkcja zwraca zmienną 'wynik' która wyświetlona pokaże formularz za pomocą którego możemy edytować zawartość podstrony
+// Funkcja zwraca formularz do edycji podstrony
 function EdytujPodstrone($key)
 {
-  $page_id = preg_replace('/\D/', '', $key); 
+  $page_id = preg_replace('/\D/', '', $key);  // Wyodrębnienie ID podstrony
 
-
+  // Zwraca HTML dla formularza edycji
   $wynik = '
 
     <div class="edytowanie">
@@ -110,16 +119,15 @@ function EdytujPodstrone($key)
 
 }
 
-/*funkcja sprawdza czy formularz edytowania został wysłany, a nastepnie 
-aktualizuje zawartość danej podstrony w bazie danych
-*/ 
+// Funkcja przetwarza dane z formularza edycji podstrony.
 function PrzetwarzajEdycje()
 {
   if (isset($_POST['edit_submit'])) {
-    $title = $_POST['title'];
-    $content = $_POST['content'];
+    // Pobranie danych z formularza
+    $title = htmlspecialchars($_POST['title']);
+    $content = htmlspecialchars($_POST['content']);
     $check = $_POST['check'];
-    $page_id = $_POST['page_id'];
+    $page_id = (int)$_POST['page_id'];
     if ($check == '') {
       $status=0;
     }
@@ -127,15 +135,16 @@ function PrzetwarzajEdycje()
       $status= 1;
     }
 
-    global $link;
+    global $link; // Połączenie z bazą danych
 
+    // Zapytanie SQL do aktualizacji podstrony
     $query="UPDATE `page_list` SET `page_title` = '$title', `page_content` = '$content', `status` = '$status' WHERE `page_list`.`id` = $page_id LIMIT 1";
     $result = mysqli_query($link,$query);
 
 }
 }
 
-//funckcja zwaraca zmienną 'wynik' która wyświetlona pokaże formularz dodawania nowej postrony
+// Funkcja zwraca formularz do dodania nowej podstrony
 function DodajNowaPodstrone() 
 {
   $wynik = '
@@ -157,17 +166,14 @@ function DodajNowaPodstrone()
 return $wynik;
 }
 
-
-/*funckcja sprawdza czy formularz dodawania nowej podstrony został wysłany - jeśli tak
-to dodaje nowy wpis z zawartością podstrony do bazy danych
-*/
+// Funkcja przetwarza dane z formularza dodania nowej podstrony.
 function PrzetwarzajDodanie()
 {
   if (isset($_POST['add_submit'])) {
-    $title = $_POST['title'];
-    $content = $_POST['content'];
+    $title = htmlspecialchars($_POST['title']);
+    $content = htmlspecialchars($_POST['content']);
     $check = $_POST['check'];
-    $alias = $_POST['alias'];
+    $alias = htmlspecialchars($_POST['alias']);
     if ($check == '') {
       $status=0;
     }
@@ -175,8 +181,9 @@ function PrzetwarzajDodanie()
       $status= 1;
     }
 
-    global $link;
+    global $link; // Połączenie z bazą danych
 
+    // Zapytanie SQL do dodania nowej podstrony
     $query = "INSERT INTO `page_list` (`page_title`, `page_content`, `status`, `alias`) 
     VALUES ('$title', '$content', '$status', '$alias')";
     $result = mysqli_query($link, $query);
@@ -184,12 +191,13 @@ function PrzetwarzajDodanie()
 }
 }
 
-//funckcja usuwa z bazy danych podstroną która zostaje podana jako argument funkcji
+// Funkcja usuwa podstronę z bazy danych na podstawie jej ID.
 function UsunPodstrone($key)
 {
-    $page_id = preg_replace('/\D/', '', $key); 
+    $page_id = preg_replace('/\D/', '', $key);  // Wyodrębnienie ID podstrony
     global $link;
 
+    // Zapytanie SQL do usunięcia podstrony
     $query="DELETE FROM `page_list`  WHERE `page_list`.`id` = $page_id LIMIT 1";
     $result = mysqli_query($link,$query);
 

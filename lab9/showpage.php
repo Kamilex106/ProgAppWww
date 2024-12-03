@@ -1,34 +1,34 @@
 <?php
-session_start();
+session_start(); // Rozpoczęcie sesji
 include('cfg.php');
-/*
-Funkcja przyjmuje argument id, a następnie jeśli id nie jest nullem pobiera z 
-bazy danych zawartość odpowiedniej podstrony i zwraca jej zawartość która może 
-zostać wyświetlona
-*/
+
+// Funkcja odpowiedzialna za wyświetlenie treści podstrony na podstawie jej identyfikatora.
 function PokazPodstrone($id)
 {
-    global $link;
+    global $link; // Użycie zmiennej globalnej $link, która przechowuje połączenie z bazą danych
+
+    // Sprawdzenie, czy identyfikator podstrony jest pusty
     if($id == null)
     {
       return "Nie znaleziono strony";
     }
     else
     {
-      $id_clear = htmlspecialchars($id);
-      $query="SELECT * FROM page_list WHERE id='$id_clear' LIMIT 1";
-      $result=mysqli_query( $link,$query);
-      $row=mysqli_fetch_array($result);
+      $id_clear = htmlspecialchars($id); // Oczyszczenie danych wejściowych w celu zabezpieczenia przed atakami 
+      $query="SELECT * FROM page_list WHERE id='$id_clear' LIMIT 1"; // Przygotowanie zapytania SQL w celu pobrania treści podstrony o danym identyfikatorze
+      $result=mysqli_query( $link,$query); // Wykonanie zapytania w bazie danych
+      $row=mysqli_fetch_array($result); // Pobranie wiersza wyników jako tablicy asocjacyjnej
 
+      // Sprawdzenie, czy zapytanie zwróciło pusty wynik (brak podstrony o takim identyfikatorze)
       if(empty($row['id']))
       {
         $web = '[nie_znaleziono_strony]';
       }
       else
       {
-        $web=$row['page_content'];
+        $web=$row['page_content']; // Jeśli strona została znaleziona, pobierana jest jej zawartość
       }
-      return $web;
+      return $web; // Zwrócenie zawartości strony lub komunikatu o błędzie
     }
     
 }

@@ -1,3 +1,4 @@
+// Kliknięcie na element o ID "animacjaTestowa1" powoduje animację zmieniającą jego szerokość, przezroczystość, rozmiar czcionki i grubość obramowania
 $("#animacjaTestowa1").on("click", function(){
     $(this).animate({
         width: "500px",
@@ -8,6 +9,8 @@ $("#animacjaTestowa1").on("click", function(){
 });
 
 
+
+// Przypisuje różne zachowania do zdarzeń "mouseover" (najazd myszką) i "mouseout" (zjechanie myszką) dla elementu o ID "animacjaTestowa2"
 $("#animacjaTestowa2").on({
     "mouseover" : function(){
     $(this).animate({
@@ -21,6 +24,7 @@ $("#animacjaTestowa2").on({
 }
 });
 
+// Kliknięcie na element o ID "animacjaTestowa3" powoduje, że element jest powiększany (ale tylko jeśli aktualnie nie trwa inna animacja na tym elemencie)
 $("#animacjaTestowa3").on("click", function() {
     if (!$(this).is(":animated")) {
         $(this).animate({
@@ -32,6 +36,7 @@ $("#animacjaTestowa3").on("click", function() {
     }
 });
 
+// Kliknięcie na element o ID "animacjaTestowa4" powoduje animację zmieniającą szerokość, przezroczystość, rozmiar czcionki i grubość obramowania
 $("#animacjaTestowa4").on("click", function(){
     $(this).animate({
         width: "1000px",

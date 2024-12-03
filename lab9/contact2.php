@@ -1,11 +1,21 @@
 <?php
 include("cfg.php");
+
+/*
+ Obsługuje wyświetlanie i przetwarzanie formularza kontaktowego z wykorzystaniem biblioteki PHPMailer.
+ Funkcjonalności:
+ - Wyświetlanie formularza
+ - Wysyłanie wiadomości email za pomocą SMTP)`
+ - Przypomnienie hasła
+ - Obsługa błędów (walidacja danych wejściowych)
+ */
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php'; 
 
-//Ta funkcja zwraca zmienną wynik, która wyświetlona za pomocą echo pokazuje formularz kontaktowy
+ // Zwraca HTML dla formularza kontaktowego
 function PokazKontakt()
 {
     $wynik = '
@@ -28,18 +38,17 @@ function PokazKontakt()
     return $wynik;
 }
 
-/*
-Funkcja wysyła maila za pomocą PHPmailera i SMTP jeśli formularz kontaktowy został 
-odpowiednio wypełniony
-*/
+// Przetwarza formularz i wysyła wiadomość email.
 function WyslijMailaKontakt($odbiorca)
 {
-    global $email_pass;
+    global $email_pass; // Globalna zmienna przechowująca hasło e-mail
+
+    // Sprawdzanie, czy wszystkie pola formularza są wypełnione
     if (empty($_POST['temat']) || empty($_POST['tresc']) || empty($_POST['email'])) {
         echo '[nie_wypelniles_pola]';
-        echo PokazKontakt();
+        echo PokazKontakt(); // Ponownie wyświetla formularz z komunikatem
     } else {
-        $mail = new PHPMailer(true);
+        $mail = new PHPMailer(true); // Tworzenie instancji PHPMailer
         try {
             $mail->isSMTP();
             $mail->Host = 'smtp.wp.pl';  
@@ -50,13 +59,13 @@ function WyslijMailaKontakt($odbiorca)
             $mail->Port = 465;  
 
             $mail->setFrom('kamil.pawww@wp.pl', 'Formularz kontaktowy');
-            $mail->addAddress($odbiorca); 
+            $mail->addAddress($odbiorca); // Adres odbiorcy
 
-
+            // Treść wiadomości
             $mail->isHTML(true); 
-            $mail->Subject = htmlspecialchars($_POST['temat']);
-            $mail->Body    = htmlspecialchars($_POST['tresc']);
-            $mail->AltBody = htmlspecialchars(strip_tags($_POST['tresc'])); 
+            $mail->Subject = htmlspecialchars($_POST['temat']); // Usunięcie znaków specjalnych
+            $mail->Body    = htmlspecialchars($_POST['tresc']); // Usunięcie znaków specjalnych
+            $mail->AltBody = htmlspecialchars(strip_tags($_POST['tresc'])); // Usunięcie znaków specjalnych
 
 
             $mail->send();
@@ -67,22 +76,21 @@ function WyslijMailaKontakt($odbiorca)
     }
 }
 
-/*funkcja sprawdza czy istnieje zmienna z hasłem do panelu admina,
-a następnie wysyła go korzystając z PHPmailera i SMTP na adres email podany w formularzu
-*/
+// Przypomina hasło użytkownikowi poprzez email.
 function PrzypomnijHaslo($odbiorca)
 {
+    // Globalne zmienne przechowujące hasło i dane logowania
     global $pass;
     global $email_pass;
 
-
+    // Sprawdzenie, czy hasło jest ustawione
     if (empty($pass)) {
-        echo '[brak_hasla]';
-        return;
+        echo '[brak_hasla]';  // Wyświetlenie komunikatu o braku hasła
+        return; // Zakończenie działania funkcji
     }
 
 
-    $mail = new PHPMailer(true);
+    $mail = new PHPMailer(true); // Tworzenie instancji PHPMailer
     try {
 
         $mail->isSMTP();
@@ -93,16 +101,17 @@ function PrzypomnijHaslo($odbiorca)
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; 
         $mail->Port = 465; 
 
-
+        // Ustawienia wiadomości e-mail
         $mail->setFrom('kamil.pawww@wp.pl', 'Formularz przypomnienia hasła');
-        $mail->addAddress($odbiorca); 
+        $mail->addAddress($odbiorca);  // Adres odbiorcy
 
-
+        // Treść wiadomości
         $mail->isHTML(true); 
         $mail->Subject = "Przypomnienie hasła";
         $mail->Body    = "Twoje hasło to: ".$pass;
         $mail->AltBody = "Twoje hasło to: ".$pass; 
 
+        // Wysyłanie wiadomości
         $mail->send();
         echo '[Haslo wyslane]';
     } catch (Exception $e) {
