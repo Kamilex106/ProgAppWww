@@ -30,6 +30,7 @@ include('cfg.php');
 include('showpage.php');
 include('./admin/admin.php');
 include('contact2.php'); //contact - wersja standarowa, contact2 - wersja korzystająca z PHPmailer
+include('sklep.php');
 ?>
 
 <!DOCTYPE html>
@@ -93,6 +94,7 @@ include('contact2.php'); //contact - wersja standarowa, contact2 - wersja korzys
         </header>
 
         <?php
+        $zarzadzaj = new ZarzadzajKategoriami($link);
         // Obsługa logiki dla panelu administratora
         if ($idp == 'admin') {
             echo FormularzLogowania(); // Wyświetlenie formularza logowania
@@ -107,10 +109,17 @@ include('contact2.php'); //contact - wersja standarowa, contact2 - wersja korzys
                 if (isset($_GET['action']) && $_GET['action'] == 'add') {
                     echo DodajNowaPodstrone(); // Formularz do dodania nowej podstrony
                 }
+                if (isset($_GET['action']) && $_GET['action'] == 'category_list') {
+                    $zarzadzaj->PokazKategorie(); // Wyświetlenie listy podstron
+                }
+                if (isset($_GET['action']) && $_GET['action'] == 'category_add') {
+                    $zarzadzaj->DodajKategorie(); // Formularz do dodania nowej podstrony
+                }
             }
             // Przetwarzanie edycji i dodawania podstron
             PrzetwarzajEdycje();
             PrzetwarzajDodanie();
+            $zarzadzaj->PrzetwarzajEdycjeKategorii();
         } else {
             // Wyświetlenie wybranej podstrony, jeśli nie jest to panel administratora
             echo PokazPodstrone($strona);
