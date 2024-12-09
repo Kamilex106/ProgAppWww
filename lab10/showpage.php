@@ -8,30 +8,36 @@ function PokazPodstrone($id)
     global $link; // Użycie zmiennej globalnej $link, która przechowuje połączenie z bazą danych
 
     // Sprawdzenie, czy identyfikator podstrony jest pusty
-    if($id == null)
-    {
-      return "Nie znaleziono strony";
+    if ($id === null || !is_numeric($id)) {
+        return "Nie znaleziono strony";
     }
-    else
-    {
-      $id_clear = htmlspecialchars($id); // Oczyszczenie danych wejściowych w celu zabezpieczenia przed atakami 
-      $query="SELECT * FROM page_list WHERE id='$id_clear' LIMIT 1"; // Przygotowanie zapytania SQL w celu pobrania treści podstrony o danym identyfikatorze
-      $result=mysqli_query( $link,$query); // Wykonanie zapytania w bazie danych
-      $row=mysqli_fetch_array($result); // Pobranie wiersza wyników jako tablicy asocjacyjnej
 
-      // Sprawdzenie, czy zapytanie zwróciło pusty wynik (brak podstrony o takim identyfikatorze)
-      if(empty($row['id']))
-      {
-        $web = '[nie_znaleziono_strony]';
-      }
-      else
-      {
-        $web=$row['page_content']; // Jeśli strona została znaleziona, pobierana jest jej zawartość
-      }
-      return $web; // Zwrócenie zawartości strony lub komunikatu o błędzie
+    // Przygotowanie zapytania SQL z użyciem prepared statements
+    $query = "SELECT `page_content` FROM `page_list` WHERE `id` = ? LIMIT 1";
+    $stmt = mysqli_prepare($link, $query);
+
+    if ($stmt) {
+        // Przypisanie wartości do zapytania i jego wykonanie
+        mysqli_stmt_bind_param($stmt, "i", $id);
+        mysqli_stmt_execute($stmt);
+
+        // Pobranie wyników
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+
+        // Sprawdzenie, czy zapytanie zwróciło pusty wynik (brak podstrony o takim identyfikatorze)
+        if (empty($row)) {
+            $web = '[nie_znaleziono_strony]';
+        } else {
+            $web = $row['page_content']; // Pobranie zawartości strony
+        }
+
+        // Zamknięcie przygotowanego zapytania
+        mysqli_stmt_close($stmt);
+    } else {
+        $web = '[błąd_bazy_danych]'; // Obsługa błędów przygotowania zapytania
     }
-    
+
+    return $web; // Zwrócenie zawartości strony lub komunikatu o błędzie
 }
-
-
 ?>

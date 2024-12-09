@@ -45,8 +45,8 @@ function PrzetwarzanieFormularza()
     // Sprawdzanie, czy formularz został przesłany
     if (isset($_POST['x1_submit'])) {
         // Pobranie i oczyszczenie danych z formularza
-        $log = isset($_POST['login_email']) ? trim($_POST['login_email']) : '';
-        $password = isset($_POST['login_pass']) ? trim($_POST['login_pass']) : '';
+        $log = isset($_POST['login_email']) ? trim(htmlspecialchars($_POST['login_email'])) : '';
+        $password = isset($_POST['login_pass']) ? trim(htmlspecialchars($_POST['login_pass'])) : '';
 
         // Sprawdzanie poprawności danych logowania
         if ($log==$login && $password==$pass) {
@@ -70,14 +70,12 @@ function ListaPodstron()
   while($row = mysqli_fetch_array( $result)) 
   {
     // Wyświetlanie podstrony z opcjami edycji i usuwania
-    echo($row['id'].' '.$row['page_title'].'  <form method="post">
-        <input type="submit" name="delete' .$row['id'].'"
-                value="Usun"/>
-        
-        <input type="submit" name="edit' .$row['id'].'"
-                value="Edytuj"/>
-    </form>');
-  }
+    echo htmlspecialchars($row['id']) . ' ' . htmlspecialchars($row['page_title']) . 
+    '  <form method="post">
+        <input type="submit" name="delete' . htmlspecialchars($row['id']) . '" value="Usuń"/>
+        <input type="submit" name="edit' . htmlspecialchars($row['id']) . '" value="Edytuj"/>
+    </form>';
+}
 
   // Obsługa akcji edycji i usuwania
   if (isset($_POST['edit_submit']) == false) {
@@ -110,7 +108,7 @@ function EdytujPodstrone($key)
 					<br>
           Czy aktywna? <input type="checkbox" name="check" id="check"  
 					<br>
-          <input type="hidden" name="page_id" value="' . $page_id . '"/>
+          <input type="hidden" name="page_id" value="' . htmlspecialchars($page_id) . '"/>
        <tr><td>&nbsp;</td><td><input type="submit" name="edit_submit" class="edytowanie" value="Wyslij" /></td></tr>
      </form>
     </div>
@@ -138,10 +136,12 @@ function PrzetwarzajEdycje()
     global $link; // Połączenie z bazą danych
 
     // Zapytanie SQL do aktualizacji podstrony
-    $query="UPDATE `page_list` SET `page_title` = '$title', `page_content` = '$content', `status` = '$status' WHERE `page_list`.`id` = $page_id LIMIT 1";
-    $result = mysqli_query($link,$query);
+    $query = "UPDATE `page_list` SET `page_title` = ?, `page_content` = ?, `status` = ? WHERE `id` = ? LIMIT 1";
+    $stmt = mysqli_prepare($link, $query);
+    mysqli_stmt_bind_param($stmt, "ssii", $title, $content, $status, $page_id);
+    mysqli_stmt_execute($stmt);
 
-}
+  }
 }
 
 // Funkcja zwraca formularz do dodania nowej podstrony
@@ -184,11 +184,12 @@ function PrzetwarzajDodanie()
     global $link; // Połączenie z bazą danych
 
     // Zapytanie SQL do dodania nowej podstrony
-    $query = "INSERT INTO `page_list` (`page_title`, `page_content`, `status`, `alias`) 
-    VALUES ('$title', '$content', '$status', '$alias')";
-    $result = mysqli_query($link, $query);
+    $query = "INSERT INTO `page_list` (`page_title`, `page_content`, `status`, `alias`) VALUES (?, ?, ?, ?)";
+    $stmt = mysqli_prepare($link, $query);
+    mysqli_stmt_bind_param($stmt, "ssis", $title, $content, $status, $alias);
+    mysqli_stmt_execute($stmt);
 
-}
+  }
 }
 
 // Funkcja usuwa podstronę z bazy danych na podstawie jej ID.
@@ -198,8 +199,10 @@ function UsunPodstrone($key)
     global $link;
 
     // Zapytanie SQL do usunięcia podstrony
-    $query="DELETE FROM `page_list`  WHERE `page_list`.`id` = $page_id LIMIT 1";
-    $result = mysqli_query($link,$query);
+    $query = "DELETE FROM `page_list` WHERE `id` = ? LIMIT 1";
+    $stmt = mysqli_prepare($link, $query);
+    mysqli_stmt_bind_param($stmt, "i", $page_id);
+    mysqli_stmt_execute($stmt);
 
 }
 
