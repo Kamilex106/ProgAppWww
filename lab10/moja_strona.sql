@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.0
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 05 Gru 2024, 15:55
--- Wersja serwera: 10.4.24-MariaDB
--- Wersja PHP: 8.1.6
+-- Generation Time: Dec 09, 2024 at 03:07 PM
+-- Wersja serwera: 10.4.32-MariaDB
+-- Wersja PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Baza danych: `moja_strona`
+-- Database: `moja_strona`
 --
 
 -- --------------------------------------------------------
@@ -31,7 +31,24 @@ CREATE TABLE `kategorie` (
   `id` int(11) NOT NULL,
   `matka` int(11) NOT NULL DEFAULT 0,
   `nazwa` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Dumping data for table `kategorie`
+--
+
+INSERT INTO `kategorie` (`id`, `matka`, `nazwa`) VALUES
+(1, 0, 'elektronika'),
+(2, 0, 'jedzenie'),
+(3, 0, 'obuwie'),
+(4, 1, 'komputery'),
+(5, 2, 'picie'),
+(6, 3, 'buty sportowe'),
+(7, 4, 'monitory'),
+(8, 7, '27cali'),
+(10, 2, 'pieczywo'),
+(11, 6, 'męskie'),
+(12, 11, 'adidas');
 
 -- --------------------------------------------------------
 
@@ -45,10 +62,10 @@ CREATE TABLE `page_list` (
   `page_content` text NOT NULL,
   `status` int(11) NOT NULL DEFAULT 1,
   `alias` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
--- Zrzut danych tabeli `page_list`
+-- Dumping data for table `page_list`
 --
 
 INSERT INTO `page_list` (`id`, `page_title`, `page_content`, `status`, `alias`) VALUES
@@ -61,7 +78,7 @@ INSERT INTO `page_list` (`id`, `page_title`, `page_content`, `status`, `alias`) 
 (7, 'javascript', '\r\n			<article>\r\n				<header class=\"artheader\">\r\n					<h2> JavaScript </h2>\r\n				</header>\r\n				JavaScript, w skrócie JS – skryptowy oraz wieloparadygmatowy język programowania, stworzony przez firmę Netscape, najczęściej stosowany na stronach internetowych. Twórcą JavaScriptu jest Brendan Eich. W połowie lat 90. XX wieku organizacja ECMA wydała na podstawie JavaScriptu standard języka skryptowego o nazwie ECMAScript, aktualnie rozwijaniem tego standardu zajmuje się komisja TC39.\r\n				<br><br>\r\n				\r\n				<h3>Wybór kolorów: </h3>\r\n				<FORM METHOD=\"POST\" NAME=\"background\">\r\n					<INPUT TYPE=\"button\" VALUE=\"żółty\" ONCLICK=\"changeBackground(\'#FFF000\')\">\r\n					<INPUT TYPE=\"button\" VALUE=\"czarny\" ONCLICK=\"changeBackground(\'#000000\')\">\r\n					<INPUT TYPE=\"button\" VALUE=\"biały\" ONCLICK=\"changeBackground(\'#FFFFFF\')\">\r\n					<INPUT TYPE=\"button\" VALUE=\"zielony\" ONCLICK=\"changeBackground(\'#00FF00\')\">\r\n					<INPUT TYPE=\"button\" VALUE=\"niebieski\" ONCLICK=\"changeBackground(\'#0000FF\')\">\r\n					<INPUT TYPE=\"button\" VALUE=\"pomarańczowy\" ONCLICK=\"changeBackground(\'#FF8000\')\">\r\n					<INPUT TYPE=\"button\" VALUE=\"szary\" ONCLICK=\"changeBackground(\'#c0c0c0\')\">\r\n					<INPUT TYPE=\"button\" VALUE=\"czerwony\" ONCLICK=\"changeBackground(\'#FF0000\')\">\r\n				</FORM>\r\n			\r\n				<div id=\"slider\"></div>\r\n				<span onclick=\"ustawslajd(1)\" style=\"cursor:pointer;\">[ 1 ]</span>\r\n				<span onclick=\"ustawslajd(2)\" style=\"cursor:pointer;\">[ 2 ]</span>\r\n				<span onclick=\"ustawslajd(3)\" style=\"cursor:pointer;\">[ 3 ]</span>\r\n			\r\n			\r\n				<h3>Konwerter: </h3>\r\n				<form name=\"converter\">\r\n					<p>\r\n						<label for=\"input\">Wprowadź wartość:</label>\r\n						<input type=\"text\" name=\"input\" id=\"input\" value=\"0\" oninput=\"convert(this.form, this.form.measure1, this.form.measure2)\">\r\n					</p>\r\n			\r\n					<p>\r\n						<label for=\"measure1\">Z:</label>\r\n						<select name=\"measure1\" id=\"measure1\" onchange=\"convert(this.form, this, this.form.measure2)\">\r\n							<option value=\"1\">metry</option>\r\n							<option value=\"0.01\">centymetry</option>\r\n							<option value=\"1000\">kilometry</option>\r\n						</select>\r\n			\r\n						<label for=\"measure2\">Na:</label>\r\n						<select name=\"measure2\" id=\"measure2\" onchange=\"convert(this.form, this.form.measure1, this)\">\r\n							<option value=\"1\">metry</option>\r\n							<option value=\"0.01\">centymetry</option>\r\n							<option value=\"1000\">kilometry</option>\r\n						</select>\r\n					</p>\r\n			\r\n					<p>\r\n						<label for=\"display\">Wynik:</label>\r\n						<input type=\"text\" name=\"display\" id=\"display\" readonly>\r\n					</p>\r\n			\r\n					<p>\r\n						<button type=\"button\" onclick=\"this.form.reset()\">Wyczyść</button>\r\n					</p>\r\n				</form>\r\n			\r\n				<h3>Dodaj cyfrę</h3>\r\n				<button onclick=\"addChar(document.converter.input, \'1\')\">1</button>\r\n				<button onclick=\"addChar(document.converter.input, \'2\')\">2</button>\r\n				<button onclick=\"addChar(document.converter.input, \'3\')\">3</button>\r\n				<button onclick=\"addChar(document.converter.input, \'4\')\">4</button>\r\n				<button onclick=\"addChar(document.converter.input, \'5\')\">5</button>\r\n				<button onclick=\"addChar(document.converter.input, \'6\')\">6</button>\r\n				<button onclick=\"addChar(document.converter.input, \'7\')\">7</button>\r\n				<button onclick=\"addChar(document.converter.input, \'8\')\">8</button>\r\n				<button onclick=\"addChar(document.converter.input, \'9\')\">9</button>\r\n				\r\n				<button onclick=\"addChar(document.converter.input, \'.\')\">.</button>\r\n			\r\n				<h3>Nowe okno</h3>\r\n				<button onclick=\"openVothcom()\">Otwórz nowe okno</button>\r\n			</article>\r\n		</main>\r\n		\r\n\r\n\r\n\r\n\r\n', 1, 'js'),
 (8, 'jquery', '\r\n		\r\n		<main>\r\n			<article id=\"jquery\">\r\n				<header class=\"artheader\">\r\n					<h2>JQuery</h2>\r\n				</header>\r\n					<div id=\"animacjaTestowa1\" class=\"test-block2\"><img style=\"float:left; margin:6px\" src=\"img/q1.jpg\" width=\"450\" height=\"250\" alt=\"jquery\"></div>\r\n\r\n					<div id=\"animacjaTestowa4\" class=\"test-block\">Kliknij, a się powiększę</div>\r\n					   \r\n					<div id=\"animacjaTestowa2\" class=\"test-block\">Najedź kursorem, a się powiększę</div>\r\n				   \r\n					<div id=\"animacjaTestowa3\" class=\"test-block\">Klikaj, abym urósł</div>\r\n			</article>\r\n		</main>\r\n\r\n', 1, 'jq'),
 (9, 'filmy', '<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/k2IydkL3EOs?si=M72uithppYy4iQKy\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>\r\n\r\n<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/OcwON22ctYc?si=JoQj4lh8khkmbvW3\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>\r\n\r\n<iframe width=\"560\" height=\"315\" src=\"https://www.youtube.com/embed/tD0Q5QwoQJI?si=JK3h4nZYMMCFLd2t\" title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>', 1, 'filmy'),
-(10, 'panel_admina', '<main>\r\n	<article id=\"admin\">\r\n		<div class=\"topnav\" id=\"myTopnav\">\r\n			<a href=\"index.php?idp=admin&action=list\">Lista podstron</a>\r\n			<a href=\"index.php?idp=admin&action=add\">Dodaj nową podstronę</a>\r\n		</div>\r\n		\r\n	</article>\r\n</main>\r\n', 1, 'admin'),
+(10, 'panel_admina', '<main>\r\n	<article id=\"admin\">\r\n		<div class=\"topnav\" id=\"myTopnav\">\r\n			<a href=\"index.php?idp=admin&action=list\">Lista podstron</a>\r\n			<a href=\"index.php?idp=admin&action=add\">Dodaj nową podstronę</a>\r\n            <a href=\"index.php?idp=admin&action=category_list\">Lista kategorii</a>\r\n			<a href=\"index.php?idp=admin&action=category_add\">Dodaj nową kategorię</a>\r\n		</div>\r\n		\r\n	</article>\r\n</main>\r\n', 1, 'admin'),
 (11, 'kontakt_php', '', 1, 'kontakt_php');
 
 --
@@ -82,20 +99,20 @@ ALTER TABLE `page_list`
   ADD UNIQUE KEY `alias` (`alias`);
 
 --
--- AUTO_INCREMENT dla zrzuconych tabel
+-- AUTO_INCREMENT for dumped tables
 --
 
 --
--- AUTO_INCREMENT dla tabeli `kategorie`
+-- AUTO_INCREMENT for table `kategorie`
 --
 ALTER TABLE `kategorie`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
--- AUTO_INCREMENT dla tabeli `page_list`
+-- AUTO_INCREMENT for table `page_list`
 --
 ALTER TABLE `page_list`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
