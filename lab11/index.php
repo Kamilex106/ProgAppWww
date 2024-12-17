@@ -31,6 +31,8 @@ include('showpage.php');
 include('./admin/admin.php');
 include('contact2.php'); //contact - wersja standarowa, contact2 - wersja korzystająca z PHPmailer
 include('sklep.php');
+include('shop.php');
+
 ?>
 
 <!DOCTYPE html>
@@ -95,6 +97,9 @@ include('sklep.php');
 
         <?php
         $zarzadzaj = new ZarzadzajKategoriami($link);
+        $zarzadzaj2 = new ZarzadzajProduktami($link);
+        $sklep = new Sklep($link);
+
         // Obsługa logiki dla panelu administratora
         if ($idp == 'admin') {
             echo FormularzLogowania(); // Wyświetlenie formularza logowania
@@ -110,10 +115,20 @@ include('sklep.php');
                     echo DodajNowaPodstrone(); // Formularz do dodania nowej podstrony
                 }
                 if (isset($_GET['action']) && $_GET['action'] == 'category_list') {
-                    $zarzadzaj->PokazKategorie(); // Wyświetlenie listy podstron
+                    $zarzadzaj->PokazKategorie(); // Wyświetlenie listy kategorii
                 }
                 if (isset($_GET['action']) && $_GET['action'] == 'category_add') {
-                    $zarzadzaj->DodajKategorie(); // Formularz do dodania nowej podstrony
+                    $zarzadzaj->DodajKategorie(); // Formularz do dodania nowej kategorii
+                }
+                if (isset($_GET['action']) && $_GET['action'] == 'product_list') {
+                    $zarzadzaj2->PokazProdukty(); // Wyświetlenie listy produktów
+                }
+                if (isset($_GET['action']) && $_GET['action'] == 'product_add') {
+                    $zarzadzaj2->DodajProdukty(); // Formularz do dodania nowego produktu
+                }
+                if (isset($_GET['action']) && $_GET['action'] == 'shop') {
+                    $sklep-> PokazKategorie();
+                     // Sklep
                 }
             }
             // Przetwarzanie edycji i dodawania podstron
@@ -121,9 +136,17 @@ include('sklep.php');
             PrzetwarzajDodanie();
             
             $zarzadzaj->PrzetwarzajEdycjeKategorii();
+            if (isset($_POST['edit_product_submit'])) {
+                $zarzadzaj2->PrzetwarzajEdycjeProduktow();
+            }
         } else {
             // Wyświetlenie wybranej podstrony, jeśli nie jest to panel administratora
             echo PokazPodstrone($strona);
+        }
+
+        if (isset($_GET['kategoria'])) {
+            $kategoria_id = (int) $_GET['kategoria'];
+            $sklep->PokazProduktyPoKategori($kategoria_id);
         }
 
 

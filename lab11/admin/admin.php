@@ -206,6 +206,16 @@ function UsunPodstrone($key)
 
 }
 
+function getCategories($pdo) {
+  $stmt = $pdo->query("SELECT id, nazwa FROM kategorie");
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
+
+function getProductsByCategory($pdo, $categoryId) {
+  $stmt = $pdo->prepare("SELECT obrazek, nazwa, cena, dostepnosc FROM produkty WHERE id_kategorii = :categoryId");
+  $stmt->execute(['categoryId' => $categoryId]);
+  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+}
 
 
 ?>
