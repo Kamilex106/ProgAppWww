@@ -31,7 +31,7 @@ include('showpage.php');
 include('./admin/admin.php');
 include('contact2.php'); //contact - wersja standarowa, contact2 - wersja korzystająca z PHPmailer
 include('sklep.php');
-include('shop.php');
+
 
 ?>
 
