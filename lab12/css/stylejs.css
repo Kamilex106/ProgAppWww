@@ -195,7 +195,6 @@ span
 
 
 
-/* Stylizacja formularzy w tabeli */
 form {
     display: inline-block;
     margin: 5px;
@@ -224,14 +223,12 @@ button:hover {
 }
 
 
-/* Styl formularza */
 #form {
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
 
-/* Styl pól formularza */
 .formField {
     width: 100%;
     padding: 10px;
@@ -246,7 +243,6 @@ button:hover {
     outline: none;
 }
 
-/* Styl dla textarea */
 textarea {
     width: 100%;
     padding: 10px;
