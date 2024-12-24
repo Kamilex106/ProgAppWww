@@ -12,7 +12,7 @@ $dbpass = '';
 $baza = 'moja_strona';
 $login = 'login';
 $pass = 'haslo';
-$email_pass= 'Kam!paw1';
+$email_pass= 'Kam!paw2';
 
 
 // Nawiązanie połączenia z bazą danych

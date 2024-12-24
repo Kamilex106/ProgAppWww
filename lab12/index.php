@@ -24,13 +24,21 @@ elseif ($idp == 'jq') $strona = '8';
 elseif ($idp == 'filmy') $strona = '9';
 elseif ($idp == 'admin') $strona = '10';
 elseif ($idp == 'kontakt_php') $strona = '11';
+elseif ($idp == 'sklep') $strona = '12';
+
+
 
 // Dołączanie plików konfiguracji i obsługi stron
 include('cfg.php'); 
 include('showpage.php');
 include('./admin/admin.php');
 include('contact2.php'); //contact - wersja standarowa, contact2 - wersja korzystająca z PHPmailer
-include('sklep.php');
+include('sklep_admin.php');
+include('sklep_klient.php');
+include('koszyk.php');
+
+
+
 
 
 ?>
@@ -42,10 +50,18 @@ include('sklep.php');
     <meta name="Author" content="Kamil Leleniewski">
     <meta name="description" content="Przegląd wybranych zagadnień związanych z komputerami">
     <title>Komputer moją pasją</title>
-    <link rel="stylesheet" href="css/style.css">
+    <?php
+    if (($idp != 'js'))
+    echo('<link rel="stylesheet" href="css/style.css">');
+    else echo('<link rel="stylesheet" href="css/stylejs.css">')
+    ?>
+    
     <script src="js/timedate.js"></script>
     <script src="js/kolorujtlo.js"></script>
     <script src="js/zmianaslajdu.js"></script>
+    <script src="js/formularze.js"></script>
+
+
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script>
@@ -61,7 +77,7 @@ include('sklep.php');
 </head>
 
 <!-- Automatyczne uruchomienie zegara i slajdera po załadowaniu strony --> 
-<body onload="startclock();zmienslajd()">
+<body onload="startclock();zmienslajd();changeBackground('#555555')">
     <div class="container">
         <header>
             <div class="row1">
@@ -79,7 +95,7 @@ include('sklep.php');
             <!-- Menu nawigacyjne -->
             <div class="topnav" id="myTopnav">
                 <a href="index.php?idp=" class="active">Główna</a>
-                <a href="index.php?idp=historia_komputerow">Historia komputerów</a>
+                <a href="index.php?idp=historia_komputerow">Historia</a>
                 <a href="index.php?idp=systemy">Systemy operacyjne</a>
                 <a href="index.php?idp=jezyki">Języki programowania</a>
                 <a href="index.php?idp=historia_internetu">Historia Internetu</a>
@@ -89,6 +105,7 @@ include('sklep.php');
                 <a href="index.php?idp=filmy">Filmy</a>
                 <a href="index.php?idp=admin">Panel administratora</a>
                 <a href="index.php?idp=kontakt_php">Kontakt PHP</a>
+                <a href="index.php?idp=sklep">Sklep</a>
                 <a href="javascript:void(0);" class="icon" onclick="myFunction()">
                     <i class="fa fa-bars"></i>
                 </a>
@@ -126,10 +143,6 @@ include('sklep.php');
                 if (isset($_GET['action']) && $_GET['action'] == 'product_add') {
                     $zarzadzaj2->DodajProdukty(); // Formularz do dodania nowego produktu
                 }
-                if (isset($_GET['action']) && $_GET['action'] == 'shop') {
-                    $sklep-> PokazKategorie();
-                     // Sklep
-                }
             }
             // Przetwarzanie edycji i dodawania podstron
             PrzetwarzajEdycje();
@@ -139,27 +152,78 @@ include('sklep.php');
             if (isset($_POST['edit_product_submit'])) {
                 $zarzadzaj2->PrzetwarzajEdycjeProduktow();
             }
-        } else {
+        } 
+
+
+        elseif ($idp == 'sklep') {
+            $koszyk = new Koszyk($link);
+            $sklep-> pokazPrzyciskiLogowaniaRejestracji();
+            if (isset($_POST['koszyk'])) {
+                // Inicjalizacja obiektu Koszyk
+
+                $koszyk->pokazKoszyk($klient_id);
+            }
+
+            elseif (isset($_POST['usun_produkt'])) {
+                $koszyk_id = (int)$_POST['koszyk_id'];
+                $koszyk->usunZKoszyka($koszyk_id);
+                $koszyk->pokazKoszyk($klient_id);
+                echo "Produkt usunięty z koszyka!";
+            }
+
+            elseif (isset($_POST['zmien_ilosc'])) {
+                $koszyk_id = (int)$_POST['koszyk_id'];
+                $nowa_ilosc = (int)$_POST['nowa_ilosc'];
+                $koszyk->zmienIlosc($koszyk_id, $nowa_ilosc);
+                $koszyk->pokazKoszyk($klient_id);
+                echo "Ilość produktu zmieniona!";
+            }
+
+            elseif (isset($_GET['kategoria'])) {
+                $kategoria_id = intval($_GET['kategoria']);
+            
+                // Wyświetl podkategorie dla wybranej kategorii
+                echo '<h2>Podkategorie:</h2>';
+                $sklep->PokazKategorie($kategoria_id);
+            
+                // Wyświetl produkty z tej kategorii
+                echo '<h2>Produkty:</h2>';
+                $sklep->PokazProduktyPoKategori($kategoria_id);
+            } else {
+                // Wyświetl główne kategorie, jeśli nie wybrano żadnej
+                echo '<h2>Kategorie główne:</h2>';
+                $sklep->PokazKategorie();
+            }
+            $klient_id = $_SESSION['klient_id'];
+
+        }
+
+        else {
             // Wyświetlenie wybranej podstrony, jeśli nie jest to panel administratora
             echo PokazPodstrone($strona);
         }
 
-        if (isset($_GET['kategoria'])) {
-            $kategoria_id = (int) $_GET['kategoria'];
-            $sklep->PokazProduktyPoKategori($kategoria_id);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            if (isset($_POST['produkt_id'])) {
+                $produkt_id = (int)$_POST['produkt_id'];
+                if ($klient_id != null) {
+                    $koszyk->dodajDoKoszyka($klient_id, $produkt_id);
+                    echo "Produkt dodany do koszyka!";
+                }
+                else {
+                    echo "Nie zalogowano";
+                }
+
+            }
         }
+
 
 
 		// Obsługa logiki dla strony "Kontakt PHP"
 		if($_GET['idp'] == 'kontakt_php')
 		{
 	 	// Formularz przypomnienia hasła
-		echo('<h2 class="heading">Przypomnij haslo:</h2>');
-		echo('<form method="post" name="PasswordForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
-		<input type="text" name="email" id="email" class="formField" placeholder="Wpisz adres email"> 
-		<br>
-		<input type="submit" name="password_submit" class="remind_password" value="Przypomnij haslo">
-	   </form>');
+		echo(PokazPrzypomnienieHasla());
 		if (isset($_POST['password_submit'])) {
 			$email = htmlspecialchars($_POST['email']);
 			PrzypomnijHaslo($email); // Funkcja do przypominania hasła
@@ -192,4 +256,5 @@ include('sklep.php');
     echo 'Autor: Kamil Leleniewski '.htmlspecialchars($nr_indeksu, ENT_QUOTES, 'UTF-8').' grupa '.htmlspecialchars($nrGrupy, ENT_QUOTES, 'UTF-8').'<br /><br />';
     ?>
 </body>
+
 </html>

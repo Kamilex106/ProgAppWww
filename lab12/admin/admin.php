@@ -21,8 +21,8 @@ function FormularzLogowania()
       <div class="logowanie">
        <form method="post" name="LoginForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URL'].'">
         <table class="logowanie">
-         <tr><td class="log4_t">[email]</td><td><input type="text" name="login_email" class="logowanie" /></td></tr>
-         <tr><td class="log4_t">[haslo]</td><td><input type="password" name="login_pass" class="logowanie" /></td></tr>
+         <tr><td class="log4_t">Login</td><td><input type="text" name="login_email" class="logowanie" /></td></tr>
+         <tr><td class="log4_t">Haslo</td><td><input type="password" name="login_pass" class="logowanie" /></td></tr>
          <tr><td>&nbsp;</td><td><input type="submit" name="x1_submit" class="logowanie" value="Zaloguj" /></td></tr>
         </table>
        </form>
@@ -155,9 +155,9 @@ function DodajNowaPodstrone()
         <br>
         <textarea style= "width: 1200px; height: 200px " id="content" name="content" placeholder="Treść strony"></textarea>
         <br>
-        Czy aktywna? <input type="checkbox" name="check" id="check"  
-        <br>
         <input type="text" name="alias" id="alias"  placeholder="Alias"> 
+        <br>
+        Czy aktywna? <input type="checkbox" name="check" id="check"  
         <br>
      <tr><td>&nbsp;</td><td><input type="submit" name="add_submit" class="dodawanie" value="Wyslij" /></td></tr>
    </form>

@@ -27,7 +27,7 @@ function PokazKontakt()
             <br>
             <input type="text" name="email" id="email" class="formField" placeholder="Wpisz adres email"> 
             <br>
-            <textarea style="width: 1200px; height: 200px;" id="message" name="tresc" placeholder="Treść wiadomości"></textarea>
+            <textarea style="width: 800px; height: 200px;" id="message" name="tresc" placeholder="Treść wiadomości"></textarea>
             <br>
             <input type="submit" name="contact_submit" class="kontakt" value="Wyślij">
        </form>
@@ -102,7 +102,7 @@ function PrzypomnijHaslo($odbiorca)
         $mail->Port = 465; 
 
         // Ustawienia wiadomości e-mail
-        $mail->setFrom('kamil.pawww@wp.pl', 'Formularz przypomnienia hasła');
+        $mail->setFrom('kamil.pawww@wp.pl', 'Formularz przypomnienia hasla');
         $mail->addAddress($odbiorca);  // Adres odbiorcy
 
         // Treść wiadomości
@@ -117,5 +117,19 @@ function PrzypomnijHaslo($odbiorca)
     } catch (Exception $e) {
         echo "Wiadomość nie mogła zostać wysłana. Błąd: {$mail->ErrorInfo}";
     }
+}
+
+
+function PokazPrzypomnienieHasla()
+{
+    $wynik = '<h2 class="heading">Przypomnij haslo:</h2> 
+    <form method="post" name="PasswordForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
+		<input type="text" name="email" id="email" class="formField" placeholder="Wpisz adres email"> 
+		<br>
+		<input type="submit" name="password_submit" class="remind_password" value="Przypomnij haslo">
+	   </form>
+    ';
+
+    return $wynik;
 }
 ?>

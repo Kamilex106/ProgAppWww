@@ -1,6 +1,5 @@
 body
 {
-	background-image: url(../img/denim.webp);
 	width: auto;
 	margin-left: auto;
 	margin-right: auto;
@@ -11,7 +10,7 @@ body
 }
 .container
 {
-	color: white;
+	color: rgb(0, 0, 0);
 	font-family: 'Open Sans', sans-serif;
 	display: flex;
 	flex-direction: column;
@@ -194,116 +193,6 @@ span
 	text-align: center;
   }
 
-td:nth-child(1) {
-	background-color: #168053;
-}
-td:nth-child(2) {
-	background-color: #244f5a;
-	padding: 2%;
-}
-td:nth-child(3) {
-	background-color: #244f5a;
-	padding: 2%;
-}
-td:nth-child(4) {
-	background-color: #168053;
-	padding: 2%;
-}
-
-#form
-{
-	padding-bottom: 20%;
-}
-
-
-#jquery
-{
-	padding-bottom: 30%;
-}
-
-.kategorie-list {
-    list-style: none;
-    padding: 0;
-    display: flex;
-    gap: 15px;
-    flex-wrap: wrap; /* Umożliwia zawijanie kategorii na kolejne linie w przypadku braku miejsca */
-}
-
-.kategorie-item {
-    display: inline-block;
-}
-
-.kategorie-item a {
-    text-decoration: none;
-    color: #ffffff;
-    padding: 10px 15px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.kategorie-item a:hover {
-    background-color: #007BFF;
-    color: white;
-}
-
-.auth-buttons {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
-}
-
-.auth-formularz {
-    border: 1px solid #ccc;
-    padding: 20px;
-    border-radius: 5px;
-    margin-bottom: 20px;
-    color: #1da06e;
-}
-
-.auth-formularz label {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.auth-formularz input[type="email"],
-.auth-formularz input[type="password"],
-.auth-formularz input[type="text"] {
-    width: 100%;
-    padding: 8px;
-    margin-bottom: 10px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
-    box-sizing: border-box;
-}
-
-.auth-formularz button {
-    padding: 10px 15px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.auth-formularz button:hover {
-    background-color: #0056b3;
-}
-
-/* Ogólny wygląd strony */
-
-table th, table td {
-    padding: 12px;
-    text-align: center;
-    border: 1px solid #ddd;
-}
-
-table th {
-    background-color: #007BFF;
-    color: #fff;
-    font-size: 16px;
-}
-
 
 
 /* Stylizacja formularzy w tabeli */
@@ -388,15 +277,6 @@ input[type="number"] {
     box-sizing: border-box;
 }
 
-input[type="date"] {
-    width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-    resize: vertical;
-    box-sizing: border-box;
-}
 
 select {
     width: 100%;
@@ -408,22 +288,3 @@ select {
     box-sizing: border-box;
 }
 
-/* Styl przycisku wyślij */
-input[type="submit"] {
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 15px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
-input[type="submit"]:hover {
-    background-color: #1c582e;
-}
-
-input[type="submit"]:active {
-    background-color: #3e8e41;
-}
