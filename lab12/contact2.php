@@ -15,8 +15,10 @@ use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php'; 
 
- // Zwraca HTML dla formularza kontaktowego
-function PokazKontakt()
+class Kontakt
+{
+// Zwraca HTML dla formularza kontaktowego
+public function PokazKontakt()
 {
     $wynik = '
     <div class="Kontakt">
@@ -39,7 +41,7 @@ function PokazKontakt()
 }
 
 // Przetwarza formularz i wysyła wiadomość email.
-function WyslijMailaKontakt($odbiorca)
+public function WyslijMailaKontakt($odbiorca)
 {
     global $email_pass; // Globalna zmienna przechowująca hasło e-mail
 
@@ -77,7 +79,7 @@ function WyslijMailaKontakt($odbiorca)
 }
 
 // Przypomina hasło użytkownikowi poprzez email.
-function PrzypomnijHaslo($odbiorca)
+public function PrzypomnijHaslo($odbiorca)
 {
     // Globalne zmienne przechowujące hasło i dane logowania
     global $pass;
@@ -107,7 +109,7 @@ function PrzypomnijHaslo($odbiorca)
 
         // Treść wiadomości
         $mail->isHTML(true); 
-        $mail->Subject = "Przypomnienie hasła";
+        $mail->Subject = "Przypomnienie hasla";
         $mail->Body    = "Twoje hasło to: ".$pass;
         $mail->AltBody = "Twoje hasło to: ".$pass; 
 
@@ -119,8 +121,8 @@ function PrzypomnijHaslo($odbiorca)
     }
 }
 
-
-function PokazPrzypomnienieHasla()
+// Funkcja zwracająca formularz przypomnienia hasła
+public function PokazPrzypomnienieHasla()
 {
     $wynik = '<h2 class="heading">Przypomnij haslo:</h2> 
     <form method="post" name="PasswordForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
@@ -132,4 +134,7 @@ function PokazPrzypomnienieHasla()
 
     return $wynik;
 }
+
+}
 ?>
+ 

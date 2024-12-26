@@ -11,210 +11,203 @@ Funkcjonalności:
 */
 
 // Zwraca HTML dla formularza logowania
-function FormularzLogowania()
+
+class Admin
 {
-  if ($_SESSION["is_logged"]==0) // Jeśli użytkownik jest niezalogowany
-  {
-    $wynik = '
-    <div class="logowanie">
-     <h1 class="heading">Panel CMS:</h1>
-      <div class="logowanie">
-       <form method="post" name="LoginForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URL'].'">
-        <table class="logowanie">
-         <tr><td class="log4_t">Login</td><td><input type="text" name="login_email" class="logowanie" /></td></tr>
-         <tr><td class="log4_t">Haslo</td><td><input type="password" name="login_pass" class="logowanie" /></td></tr>
-         <tr><td>&nbsp;</td><td><input type="submit" name="x1_submit" class="logowanie" value="Zaloguj" /></td></tr>
-        </table>
-       </form>
-      </div>
-    </div>
-    ';
+    private $link;
 
-    return $wynik;
-  }
+    public function __construct($link)
+    {
+        $this->link = $link;
+    }
 
-
-}
-
-// Przetwarza dane z formularza logowania.
-function PrzetwarzanieFormularza()
-{
-    global $login;
-    global $pass;
-
-    // Sprawdzanie, czy formularz został przesłany
-    if (isset($_POST['x1_submit'])) {
-        // Pobranie i oczyszczenie danych z formularza
-        $log = isset($_POST['login_email']) ? trim(htmlspecialchars($_POST['login_email'])) : '';
-        $password = isset($_POST['login_pass']) ? trim(htmlspecialchars($_POST['login_pass'])) : '';
-
-        // Sprawdzanie poprawności danych logowania
-        if ($log==$login && $password==$pass) {
-            echo 'Zalogowano poprawnie';
-            $_SESSION["is_logged"]=1; // Oznaczenie użytkownika jako zalogowanego
-        } else {
-          echo '<p style="color:red;">Wszystkie pola muszą być wypełnione.</p>';
-          echo(FormularzLogowania()); // Ponowne wyświetlenie formularza
+    // Funckcja zwracająca formularz logowania
+    public function FormularzLogowania()
+    {
+      if ($_SESSION["is_logged"]==0) // Jeśli użytkownik jest niezalogowany
+      {
+        $wynik = '
+        <div class="logowanie">
+         <h1 class="heading">Panel CMS:</h1>
+          <div class="logowanie">
+           <form method="post" name="LoginForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URL'].'">
+            <table class="logowanie">
+             <tr><td class="log4_t">Login</td><td><input type="text" name="login_email" class="logowanie" /></td></tr>
+             <tr><td class="log4_t">Haslo</td><td><input type="password" name="login_pass" class="logowanie" /></td></tr>
+             <tr><td>&nbsp;</td><td><input type="submit" name="x1_submit" class="logowanie" value="Zaloguj" /></td></tr>
+            </table>
+           </form>
+          </div>
+        </div>
+        ';
+    
+        return $wynik;
+      }
+    
+    
+    }
+    
+    // Przetwarza dane z formularza logowania.
+    public function PrzetwarzanieFormularza()
+    {
+        global $login;
+        global $pass;
+    
+        // Sprawdzanie, czy formularz został przesłany
+        if (isset($_POST['x1_submit'])) {
+            // Pobranie i oczyszczenie danych z formularza
+            $log = isset($_POST['login_email']) ? trim(htmlspecialchars($_POST['login_email'])) : '';
+            $password = isset($_POST['login_pass']) ? trim(htmlspecialchars($_POST['login_pass'])) : '';
+    
+            // Sprawdzanie poprawności danych logowania
+            if ($log==$login && $password==$pass) {
+                echo 'Zalogowano poprawnie';
+                $_SESSION["is_logged"]=1; // Oznaczenie użytkownika jako zalogowanego
+                echo '<script> setTimeout(function(){window.location.href = window.location.href}, 1500) </script>'; // Odświeżenie strony po 1.5 sekundy
+            } 
+            else {
+                echo '<p style="color:red;">Wszystkie pola muszą być poprawnie wypełnione.</p>';
+            }
+        }
+        // Obsługa wylogowania
+        if  (isset($_GET['action']) && $_GET['action'] == 'logout') {
+            session_unset(); // Usunięcie wszystkich zmiennych sesyjnych
+            session_destroy(); // Zniszczenie sesji
+            echo '<script>window.location.href = "index.php?idp=admin";</script>'; // Przekierowanie na stronę admin
+            exit;
         }
     }
-}
-
-// Wyświetla listę podstron z opcjami edycji i usuwania.
-function ListaPodstron()
-{
-  global $link; // Połączenie z bazą danych
-  $query="SELECT * FROM page_list ORDER BY id LIMIT 100"; // Pobranie listy podstron
-  $result = mysqli_query($link,$query);
-
-  // Iteracja przez wyniki zapytania
-  while($row = mysqli_fetch_array( $result)) 
-  {
-    // Wyświetlanie podstrony z opcjami edycji i usuwania
-    echo htmlspecialchars($row['id']) . ' ' . htmlspecialchars($row['page_title']) . 
-    '  <form method="post">
-        <input type="submit" name="delete' . htmlspecialchars($row['id']) . '" value="Usuń"/>
-        <input type="submit" name="edit' . htmlspecialchars($row['id']) . '" value="Edytuj"/>
-    </form>';
-}
-
-  // Obsługa akcji edycji i usuwania
-  if (isset($_POST['edit_submit']) == false) {
-    foreach ($_POST as $key => $value) {
-      if (strpos($key, needle: 'delete') === 0) {
-          UsunPodstrone($key); // Usuwanie podstrony
+    
+    // Wyświetla listę podstron z opcjami edycji i usuwania.
+    public function ListaPodstron()
+    {
+      global $link; // Połączenie z bazą danych
+      $query="SELECT * FROM page_list ORDER BY id LIMIT 100"; // Pobranie listy podstron
+      $result = mysqli_query($link,$query);
+    
+      // Iteracja przez wyniki zapytania
+      while($row = mysqli_fetch_array( $result)) 
+      {
+        // Wyświetlanie podstrony z opcjami edycji i usuwania
+        echo htmlspecialchars($row['id']) . ' ' . htmlspecialchars($row['page_title']) . 
+        '  <form method="post">
+            <input type="submit" name="delete' . htmlspecialchars($row['id']) . '" value="Usuń"/>
+            <input type="submit" name="edit' . htmlspecialchars($row['id']) . '" value="Edytuj"/>
+        </form>';
+    }
+    
+      // Obsługa akcji edycji i usuwania
+      if (isset($_POST['edit_submit']) == false) {
+        foreach ($_POST as $key => $value) {
+            if (strpos($key, needle: 'delete') === 0) {
+                $this->UsunPodstrone($key); // Usuwanie podstrony
+            }
+            if (strpos($key, needle: 'edit') === 0) {
+                echo($this->FormularzPodstrony($key));  // Wyświetlenie formularza edycji
+            }
       }
-      if (strpos($key, needle: 'edit') === 0) {
-        echo(EdytujPodstrone($key));  // Wyświetlenie formularza edycji
+      }
+    
     }
-  }
-  }
+    
+    // Funkcja zwraca formularz do edycji/dodawania podstrony
+    public function FormularzPodstrony($key = null)
+    {
+        global $link; // Połączenie z bazą danych
+        $page_id = $key ? preg_replace('/\D/', '', $key) : '';
+        $is_edit = $page_id !== ''; // Czy edycja, czy dodawanie?
+    
+        // Domyślne wartości pól
+        $title = '';
+        $content = '';
+        $alias = '';
+        $status = 0;
+    
+        // Jeśli edytujemy, pobierz dane z bazy
+        if ($is_edit) {
+            $query = "SELECT * FROM `page_list` WHERE `id` = ? LIMIT 1";
+            $stmt = mysqli_prepare($link, $query);
+            mysqli_stmt_bind_param($stmt, "i", $page_id);
+            mysqli_stmt_execute($stmt);
+            $result = mysqli_stmt_get_result($stmt);
+    
+            if ($row = mysqli_fetch_assoc($result)) {
+                $title = htmlspecialchars($row['page_title']);
+                $content = htmlspecialchars($row['page_content']);
+                $alias = htmlspecialchars($row['alias']);
+                $status = (int)$row['status'];
+            }
+        }
+    
+        // Generowanie formularza
+        $wynik = '
+        <div class="formularz-podstrony">
+            <form method="post" enctype="multipart/form-data" action="'.htmlspecialchars($_SERVER['REQUEST_URI']).'">
+                <input type="text" name="title" id="title" placeholder="Tytuł" value="'.htmlspecialchars($title).'" required>
+                <br>
+                <textarea style="width: 1200px; height: 200px" id="content" name="content" placeholder="Treść strony" required>'
+                .htmlspecialchars($content).'</textarea>
+                <br>
+                <input type="text" name="alias" id="alias" placeholder="Alias" value="'.htmlspecialchars($alias).'" required>
+                <br>';
 
-}
-
-// Funkcja zwraca formularz do edycji podstrony
-function EdytujPodstrone($key)
-{
-  $page_id = preg_replace('/\D/', '', $key);  // Wyodrębnienie ID podstrony
-
-  // Zwraca HTML dla formularza edycji
-  $wynik = '
-
-    <div class="edytowanie">
-     <form method="post" name="EditForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URL'].'">
-<br>
-					<input type="text" name="title" id="title"  placeholder="Tytuł"> 
-					<br>
-					<textarea style= "width: 1200px; height: 200px " id="content" name="content" placeholder="Treść strony"></textarea>
-					<br>
-          Czy aktywna? <input type="checkbox" name="check" id="check"  
-					<br>
-          <input type="hidden" name="page_id" value="' . htmlspecialchars($page_id) . '"/>
-       <tr><td>&nbsp;</td><td><input type="submit" name="edit_submit" class="edytowanie" value="Wyslij" /></td></tr>
-     </form>
-    </div>
-  ';
-  return $wynik;
-
-}
-
-// Funkcja przetwarza dane z formularza edycji podstrony.
-function PrzetwarzajEdycje()
-{
-  if (isset($_POST['edit_submit'])) {
-    // Pobranie danych z formularza
-    $title = htmlspecialchars($_POST['title']);
-    $content = htmlspecialchars($_POST['content']);
-    $check = $_POST['check'];
-    $page_id = (int)$_POST['page_id'];
-    if ($check == '') {
-      $status=0;
+        $wynik .= '
+                Czy aktywna? <input type="checkbox" name="check" id="check" '.($status ? 'checked' : '').'><br>
+                <input type="hidden" name="page_id" value="'.htmlspecialchars($page_id).'">
+                <input type="submit" name="'.($is_edit ? 'edit_submit' : 'add_submit').'" value="Wyślij">
+            </form>
+        </div>';
+    
+        return $wynik;
     }
-    else {
-      $status= 1;
+    
+    
+    
+    // Funkcja przetwarza dane z formularza edycji/dodawania podstrony.
+    public function PrzetwarzajPodstrone()
+    {
+        if (isset($_POST['edit_submit']) || isset($_POST['add_submit'])) {
+            $title = htmlspecialchars($_POST['title']);
+            $content = htmlspecialchars($_POST['content']);
+            $check = isset($_POST['check']) ? 1 : 0;
+            $alias = htmlspecialchars($_POST['alias']);
+            $page_id = isset($_POST['page_id']) ? (int)$_POST['page_id'] : null;
+    
+            global $link; // Połączenie z bazą danych
+    
+            if ($page_id) {
+                // Aktualizacja istniejącej podstrony
+                $query = "UPDATE `page_list` SET `page_title` = ?, `page_content` = ?, `status` = ?, `alias` = ? WHERE `id` = ? LIMIT 1";
+                $stmt = mysqli_prepare($link, $query);
+                mysqli_stmt_bind_param($stmt, "ssisi", $title, $content, $check, $alias, $page_id);
+            } else {
+                // Dodanie nowej podstrony
+                $alias = htmlspecialchars($_POST['alias']);
+                $query = "INSERT INTO `page_list` (`page_title`, `page_content`, `status`, `alias`) VALUES (?, ?, ?, ?)";
+                $stmt = mysqli_prepare($link, $query);
+                mysqli_stmt_bind_param($stmt, "ssis", $title, $content, $check, $alias);
+            }
+    
+            mysqli_stmt_execute($stmt);
+            echo '<script>window.location.href = window.location.href;</script>'; // Odświeżenie strony
+        }
     }
-
-    global $link; // Połączenie z bazą danych
-
-    // Zapytanie SQL do aktualizacji podstrony
-    $query = "UPDATE `page_list` SET `page_title` = ?, `page_content` = ?, `status` = ? WHERE `id` = ? LIMIT 1";
-    $stmt = mysqli_prepare($link, $query);
-    mysqli_stmt_bind_param($stmt, "ssii", $title, $content, $status, $page_id);
-    mysqli_stmt_execute($stmt);
-
-  }
-}
-
-// Funkcja zwraca formularz do dodania nowej podstrony
-function DodajNowaPodstrone() 
-{
-  $wynik = '
-
-  <div class="dodawanie">
-   <form method="post" name="EditForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URL'].'">
-        <input type="text" name="title" id="title"  placeholder="Tytuł"> 
-        <br>
-        <textarea style= "width: 1200px; height: 200px " id="content" name="content" placeholder="Treść strony"></textarea>
-        <br>
-        <input type="text" name="alias" id="alias"  placeholder="Alias"> 
-        <br>
-        Czy aktywna? <input type="checkbox" name="check" id="check"  
-        <br>
-     <tr><td>&nbsp;</td><td><input type="submit" name="add_submit" class="dodawanie" value="Wyslij" /></td></tr>
-   </form>
-  </div>
-';
-return $wynik;
-}
-
-// Funkcja przetwarza dane z formularza dodania nowej podstrony.
-function PrzetwarzajDodanie()
-{
-  if (isset($_POST['add_submit'])) {
-    $title = htmlspecialchars($_POST['title']);
-    $content = htmlspecialchars($_POST['content']);
-    $check = $_POST['check'];
-    $alias = htmlspecialchars($_POST['alias']);
-    if ($check == '') {
-      $status=0;
+    
+    
+    // Funkcja usuwa podstronę z bazy danych na podstawie jej ID.
+    public function UsunPodstrone($key)
+    {
+        $page_id = preg_replace('/\D/', '', $key);  // Wyodrębnienie ID podstrony
+        global $link;
+    
+        // Zapytanie SQL do usunięcia podstrony
+        $query = "DELETE FROM `page_list` WHERE `id` = ? LIMIT 1";
+        $stmt = mysqli_prepare($link, $query);
+        mysqli_stmt_bind_param($stmt, "i", $page_id);
+        mysqli_stmt_execute($stmt);
+        echo '<script>window.location.href = window.location.href;</script>'; // Odświeżenie strony
     }
-    else {
-      $status= 1;
-    }
-
-    global $link; // Połączenie z bazą danych
-
-    // Zapytanie SQL do dodania nowej podstrony
-    $query = "INSERT INTO `page_list` (`page_title`, `page_content`, `status`, `alias`) VALUES (?, ?, ?, ?)";
-    $stmt = mysqli_prepare($link, $query);
-    mysqli_stmt_bind_param($stmt, "ssis", $title, $content, $status, $alias);
-    mysqli_stmt_execute($stmt);
-
-  }
-}
-
-// Funkcja usuwa podstronę z bazy danych na podstawie jej ID.
-function UsunPodstrone($key)
-{
-    $page_id = preg_replace('/\D/', '', $key);  // Wyodrębnienie ID podstrony
-    global $link;
-
-    // Zapytanie SQL do usunięcia podstrony
-    $query = "DELETE FROM `page_list` WHERE `id` = ? LIMIT 1";
-    $stmt = mysqli_prepare($link, $query);
-    mysqli_stmt_bind_param($stmt, "i", $page_id);
-    mysqli_stmt_execute($stmt);
-
-}
-
-function getCategories($pdo) {
-  $stmt = $pdo->query("SELECT id, nazwa FROM kategorie");
-  return $stmt->fetchAll(PDO::FETCH_ASSOC);
-}
-
-function getProductsByCategory($pdo, $categoryId) {
-  $stmt = $pdo->prepare("SELECT obrazek, nazwa, cena, dostepnosc FROM produkty WHERE id_kategorii = :categoryId");
-  $stmt->execute(['categoryId' => $categoryId]);
-  return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
 }
 
 

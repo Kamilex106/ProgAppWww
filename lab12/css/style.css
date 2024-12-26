@@ -16,6 +16,7 @@ body
 	display: flex;
 	flex-direction: column;
 	
+	
 }
 
 .artheader
@@ -403,7 +404,7 @@ select {
 }
 
 input[type="submit"] {
-    background-color: #4CAF50;
+    background-color: #168053;
     color: white;
     border: none;
     padding: 4px 8px;
@@ -414,9 +415,61 @@ input[type="submit"] {
 }
 
 input[type="submit"]:hover {
-    background-color: #1c582e;
+    background-color: #144121;
 }
 
 input[type="submit"]:active {
     background-color: #3e8e41;
+}
+
+.powrot-button {
+    margin-bottom: 10px;
+}
+
+.powrot-button a {
+    display: inline-block;
+    padding: 8px 15px;
+    background-color: #007bff;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 5px;
+    font-weight: bold;
+}
+
+.powrot-button a:hover {
+    background-color: #0056b3;
+}
+
+.produkty-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
+}
+
+.produkt {
+    display: flex;
+    flex-direction: column; 
+    justify-content: space-between; 
+    align-items: center; 
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 1px;
+    text-align: center;
+    height: 100%; 
+}
+
+.produkt img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.produkt h3 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.produkt p {
+    margin: 5px 0;
 }

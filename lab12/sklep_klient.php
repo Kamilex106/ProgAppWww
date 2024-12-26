@@ -17,35 +17,69 @@ class Sklep
     // Funkcja do wyświetlania kategorii w strukturze drzewa
     public function PokazKategorie($parent_id = 0)
     {
-        // Przygotowanie zapytania SQL
+
+        // Przygotowanie zapytania SQL w celu pobrania kategorii, których 'matka' odpowiada $parent_id
         $query = "SELECT * FROM `kategorie` WHERE `matka` = $parent_id ORDER BY `id`";
         $result = mysqli_query($this->link, $query);
     
         // Sprawdzenie, czy zapytanie zwróciło wyniki
         if ($result && mysqli_num_rows($result) > 0) {
             echo '<ul class="kategorie-list">';
+            // Iteracja po wynikach zapytania
             while ($row = mysqli_fetch_assoc($result)) {
                 echo '<li class="kategorie-item">';
-                // Link do bieżącej strony z parametrem kategoria
+                // Tworzenie linku do strony sklepu z filtrowaniem po kategorii
                 echo '<a href="index.php?idp=sklep&kategoria=' . $row['id'] . '">' . htmlspecialchars($row['nazwa']) . '</a>';
                 echo '</li>';
             }
             echo '</ul>';
         }
+        // Wyświetlenie przycisku powrotu do głównych kategorii, jeśli nie jesteśmy na poziomie głównym
+        if ($parent_id != 0) {
+            echo '<div class="powrot-button">';
+            echo '<a href="index.php?idp=sklep">Powrót do głównych kategorii</a>';
+            echo '</div>';
+        }
     }
     
     
-
-    // Funkcja do wyświetlania produktów po kliknięciu na kategorię
+    
+    // Funkcja rekurencyjnie pobierająca wszystkie podkategorie danej kategorii
+    public function getAllSubcategories($parent_id)
+    {
+        $subcategories = []; // Inicjalizacja tablicy na podkategorie
+        $query = "SELECT `id` FROM `kategorie` WHERE `matka` = $parent_id"; // Zapytanie SQL w celu pobrania ID podkategorii dla danej kategorii nadrzędnej
+        $result = mysqli_query($this->link, $query);
+    
+        // Sprawdzenie, czy zapytanie zwróciło wyniki
+        if ($result && mysqli_num_rows($result) > 0) {
+            // Iteracja po wynikach
+            while ($row = mysqli_fetch_assoc($result)) {
+                $subcategories[] = $row['id']; // Dodanie ID znalezionej podkategorii do tablicy
+                // Rekurencyjne wywołanie funkcji dla znalezionej podkategorii w celu znalezienia jej podkategorii
+                $subcategories = array_merge($subcategories, $this->getAllSubcategories($row['id']));
+            }
+        }
+    
+        return $subcategories; // Zwrócenie tablicy z ID wszystkich podkategorii
+    }
+    
+    // Funkcja wyświetlająca produkty należące do danej kategorii i jej podkategorii
     public function PokazProduktyPoKategori($kategoria_id)
     {
-        // Przygotowanie zapytania SQL do pobrania produktów z danej kategorii
-        $query = "SELECT * FROM `produkty` WHERE `kategoria` = $kategoria_id ORDER BY `id` DESC";
+        // Pobranie wszystkich podkategorii dla danej kategorii matki
+        $all_categories = $this->getAllSubcategories($kategoria_id);
+        $all_categories[] = $kategoria_id; // Dodajemy samą kategorię matkę
+    
+        // Tworzymy zapytanie SQL do pobrania produktów z wybranych kategorii
+        $category_list = implode(',', $all_categories);
+        $query = "SELECT * FROM `produkty` WHERE `kategoria` IN ($category_list) ORDER BY `id` DESC";
         $result = mysqli_query($this->link, $query);
-
-        // Sprawdzanie, czy są produkty w danej kategorii
+    
+        // Sprawdzamy, czy są produkty w wybranych kategoriach
         if ($result && mysqli_num_rows($result) > 0) {
             while ($row = mysqli_fetch_assoc($result)) {
+                echo '<div class="produkt">';
                 echo 'ID: ' . $row['id'] . ' | Tytuł: ' . htmlspecialchars($row['tytul']) . '<br>';
                 echo 'Opis: ' . htmlspecialchars($row['opis']) . '<br>';
                 echo 'Dostępność: ' . htmlspecialchars(sprawdzDostepnosc($row)) . '<br>';
@@ -56,12 +90,13 @@ class Sklep
                 echo '<input type="hidden" name="produkt_id" value="' . $row['id'] . '">';
                 echo '<button type="submit" name="dodaj_koszyk">Dodaj do koszyka</button>';
                 echo '</form>';
-
+                echo '</div>';
             }
         } else {
             echo 'Brak produktów w tej kategorii.';
         }
     }
+    
 
 
 
@@ -74,6 +109,7 @@ class Sklep
         $stmt->execute();
         $stmt->store_result();
 
+        // Jeśli liczba znalezionych wierszy jest większa od 0, email jest już zarejestrowany
         if ($stmt->num_rows > 0) {
             $stmt->close();
             return 'Email jest już zarejestrowany.';
@@ -104,8 +140,10 @@ class Sklep
         $stmt->execute();
         $result = $stmt->get_result();
 
+        // Sprawdzenie, czy znaleziono klienta o podanym emailu
         if ($result->num_rows == 1) {
-            $klient = $result->fetch_assoc();
+            $klient = $result->fetch_assoc(); // Pobranie danych klienta
+            // Weryfikacja hasła
             if (password_verify($haslo, $klient['haslo'])) {
                 // Ustawienie sesji
                 $_SESSION['klient_id'] = $klient['id'];
@@ -119,19 +157,20 @@ class Sklep
 
     }
 
+    // Funkcja wyświetlająca przyciski logowania/rejestracji lub informacje o zalogowaniu i przycisk wylogowania
     public function pokazPrzyciskiLogowaniaRejestracji()
     {
         // Obsługa wylogowania
         if (isset($_POST['wyloguj_submit'])) {
-            session_unset();
-            session_destroy();
+            session_unset(); // Usunięcie wszystkich zmiennych sesyjnych
+            session_destroy(); // Zniszczenie sesji
             echo '<script>window.location.href = window.location.href;</script>'; // Odświeżenie strony
             exit;
         }
 
         
     
-        // Sprawdzamy, czy użytkownik jest zalogowany
+        // Sprawdzenie, czy użytkownik jest zalogowany na podstawie istnienia zmiennej sesyjnej 'klient_id'
         if (!isset($_SESSION['klient_id'])) {
             // Obsługa rejestracji
             if (isset($_POST['rejestracja_submit'])) {
@@ -140,6 +179,7 @@ class Sklep
                 $imie = trim($_POST['imie_rejestracja']);
                 $nazwisko = trim($_POST['nazwisko_rejestracja']);
     
+                // Wywołanie metody rejestracji i wyświetlenie komunikatu
                 $wynik_rejestracji = $this->zarejestrujKlienta($email, $haslo, $imie, $nazwisko);
                 if ($wynik_rejestracji === true) {
                     echo "<p style='color: green;'>Rejestracja zakończona sukcesem! Możesz się teraz zalogować.</p>";
@@ -153,6 +193,7 @@ class Sklep
                 $email = trim($_POST['email_logowanie']);
                 $haslo = trim($_POST['haslo_logowanie']);
     
+                // Wywołanie metody logowania i wyświetlenie komunikatu
                 $wynik_logowania = $this->zalogujKlienta($email, $haslo);
                 if ($wynik_logowania === true) {
                     echo "<p style='color: green;'>Zalogowano pomyślnie!</p>";
@@ -163,7 +204,7 @@ class Sklep
                 }
             }
     
-            // Formularze logowania i rejestracji
+            // Wyświetlenie przycisków i formularzy logowania oraz rejestracji
             echo '
             <div class="auth-buttons">
                 <button onclick="pokazFormularz(\'logowanie\')">Zaloguj</button>
@@ -197,7 +238,7 @@ class Sklep
             </div>
             ';
         } else {
-            // Wylogowanie jako formularz POST
+            // Wyświetlenie informacji o zalogowaniu i przycisku wylogowania
             echo '
             <form method="post">
                 <p>Witaj, jesteś zalogowany!</p>

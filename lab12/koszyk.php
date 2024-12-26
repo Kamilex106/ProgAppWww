@@ -2,12 +2,9 @@
 
 require_once 'cfg.php'; // Plik konfiguracyjny z połączeniem do bazy danych
 
-
-
-
 $klient_id = $_SESSION['klient_id'];
 
-// Dodajemy funkcje zarządzania koszykiem
+// Klasa do zarządzania koszykiem klienta
 class Koszyk
 {
     private $link;
@@ -18,18 +15,32 @@ class Koszyk
     }
 
     // Dodawanie produktu do koszyka
-    public function dodajDoKoszyka($klient_id, $produkt_id, $ilosc = 1)
-    {
-        $stmt = $this->link->prepare("
-            INSERT INTO koszyki (klient_id, produkt_id, ilosc) 
-            VALUES (?, ?, ?) 
-            ON DUPLICATE KEY UPDATE ilosc = ilosc + ?
-        ");
-        $stmt->bind_param("iiii", $klient_id, $produkt_id, $ilosc, $ilosc);
+    public function dodajDoKoszyka($klient_id, $produkt_id) {
+        // Sprawdź, czy produkt już istnieje w koszyku
+        $query = "SELECT id, ilosc FROM koszyki WHERE klient_id = ? AND produkt_id = ?";
+        $stmt = $this->link->prepare($query);
+        $stmt->bind_param("ii", $klient_id, $produkt_id);
         $stmt->execute();
+        $result = $stmt->get_result();
+    
+        if ($result->num_rows > 0) {
+            // Jeśli produkt istnieje, zwiększ ilość
+            $row = $result->fetch_assoc();
+            $nowa_ilosc = $row['ilosc'] + 1;
+            $this->zmienIlosc($row['id'], $nowa_ilosc);
+        } 
+        else {
+            // Jeśli produkt nie istnieje, dodaj go jako nową pozycję
+            $insert_query = "INSERT INTO koszyki (klient_id, produkt_id, ilosc) VALUES (?, ?, 1)";
+            $insert_stmt = $this->link->prepare($insert_query);
+            $insert_stmt->bind_param("ii", $klient_id, $produkt_id);
+            $insert_stmt->execute();
+            $insert_stmt->close();
+        }
+    
         $stmt->close();
     }
-
+    
     // Wyświetlanie koszyka
     public function pokazKoszyk($klient_id)
     {
@@ -53,14 +64,15 @@ class Koszyk
                 <th>Akcje</th>
               </tr>';
 
-        $suma = 0;
+        $suma = 0; // Inicjalizacja sumy wartości koszyka
+        // Iteracja po produktach w koszyku
         while ($row = $result->fetch_assoc()) {
-            $cena_brutto = $row['cena_netto'] + $row['podatek_vat']; // Dodanie VAT
-            $wartosc = $cena_brutto * $row['ilosc'];
-            $suma += $wartosc;
+            $cena_brutto = $row['cena_netto'] + $row['podatek_vat']; // Obliczenie ceny brutto
+            $wartosc = $cena_brutto * $row['ilosc']; // Obliczenie wartości produktu w koszyku
+            $suma += $wartosc; // Dodanie do sumy
 
             echo '
-            <tr>
+                <tr>
                     <td>' . htmlspecialchars($row['tytul']) . '</td>
                     <td>' . number_format($row['cena_netto'], 2) . ' PLN</td>
                     <td>' . $row['ilosc'] . '</td>
@@ -77,8 +89,9 @@ class Koszyk
                         </form>
                         
                     </td>
-                  </tr>';
+                </tr>';
         }
+        // Wyświetlenie podsumowania koszyka
         echo '<tr>
                 <td colspan="3" align="right"><strong>Łączna wartość:</strong></td>
                 <td>' . number_format($suma, 2) . ' PLN</td>

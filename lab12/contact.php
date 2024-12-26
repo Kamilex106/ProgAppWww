@@ -103,4 +103,19 @@ function PrzypomnijHaslo($odbiorca)
         echo '[blad_wysylania]';
     }
 }
+
+// Funkcja zwracająca formularz przypomnienia hasła
+function PokazPrzypomnienieHasla()
+{
+    $wynik = '<h2 class="heading">Przypomnij haslo:</h2> 
+    <form method="post" name="PasswordForm" enctype="multipart/form-data" action="'.$_SERVER['REQUEST_URI'].'">
+		<input type="text" name="email" id="email" class="formField" placeholder="Wpisz adres email"> 
+		<br>
+		<input type="submit" name="password_submit" class="remind_password" value="Przypomnij haslo">
+	   </form>
+    ';
+
+    return $wynik;
+}
+
 ?>

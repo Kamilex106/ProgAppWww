@@ -13,7 +13,7 @@ function PokazPodstrone($id)
     }
 
     // Przygotowanie zapytania SQL z użyciem prepared statements
-    $query = "SELECT `page_content` FROM `page_list` WHERE `id` = ? LIMIT 1";
+    $query = "SELECT `page_content`, `status` FROM `page_list` WHERE `id` = ? LIMIT 1";
     $stmt = mysqli_prepare($link, $query);
 
     if ($stmt) {
@@ -29,7 +29,12 @@ function PokazPodstrone($id)
         if (empty($row)) {
             $web = '[nie_znaleziono_strony]';
         } else {
-            $web = $row['page_content']; // Pobranie zawartości strony
+            if ($row['status']==1) {
+                $web = $row['page_content']; // Pobranie zawartości strony
+            }
+            else {
+                $web = '[strona_nieaktywna]';
+            }
         }
 
         // Zamknięcie przygotowanego zapytania
