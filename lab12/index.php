@@ -226,7 +226,8 @@ include('koszyk.php');
 		if($_GET['idp'] == 'kontakt_php')
 		{
 	 	// Formularz przypomnienia hasła
-		echo($kontakt->PokazPrzypomnienieHasla());
+		echo($kontakt->PokazPrzypomnienieHasla()); // Wyświetlenie formularza przypomnienia hasła
+        echo($kontakt->PokazKontakt()); // Wyświetlenie standardowego formularza kontaktowego
 		if (isset($_POST['password_submit'])) {
 			$email = htmlspecialchars($_POST['email']);
 			$kontakt->PrzypomnijHaslo($email); // Funkcja do przypominania hasła
@@ -235,10 +236,6 @@ include('koszyk.php');
 		{
 			$email = htmlspecialchars($_POST['email']);
 			$kontakt->WyslijMailaKontakt($email); // Funkcja wysyłająca wiadomość kontaktową
-		}
-		else
-		{
-			echo($kontakt->PokazKontakt()); // Wyświetlenie standardowego formularza kontaktowego
 		}
 		}
 
